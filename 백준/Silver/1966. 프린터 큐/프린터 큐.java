@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -22,33 +24,30 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			
 			Queue<int[]> queue = new ArrayDeque<>();
+			PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+
 			
 			for (int i = 0; i < N; i++) {
-				queue.offer(new int[] {i, Integer.parseInt(st.nextToken())});
+				int priority = Integer.parseInt(st.nextToken());
+			    queue.offer(new int[] {i, priority});
+			    pq.offer(priority);
 			}
 
 			int result = 0;
 			
 			while (!queue.isEmpty()) {
 				int[] current = queue.poll();
-				int pos = current[0];
-				int weight = current[1];
+				int idx = current[0];
+				int priority = current[1];
 				
-				boolean flag = false;
-				
-				for (int[] next : queue) {
-					if (weight < next[1]) {
-						queue.offer(current);
-						flag = true;
-						break;
-					}
-				}
-				
-				if (!flag) {
+				if (priority == pq.peek()) {
 					result++;
-					if (pos == M) {
+					pq.poll();
+					if (idx == M) {
 						break;
 					}
+				} else {
+					queue.offer(current);
 				}
 			}
 			
