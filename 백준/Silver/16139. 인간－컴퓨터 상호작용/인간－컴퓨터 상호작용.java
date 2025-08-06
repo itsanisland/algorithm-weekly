@@ -24,21 +24,25 @@ public class Main {
 			char ch = S.charAt(i - 1);
 			int idx = ch - 'a';
 			
-            // 누적합 계산
+			// 누적합 계산
 			for (int j = 0; j < 26; j++) {
 				prefixSumCounts[j][i] = prefixSumCounts[j][i - 1] + ((j == idx) ? 1 : 0);
 			}
 		}
 		
+		StringBuilder sb = new StringBuilder();
+		
 		for (int i = 0; i < q; i++) {
 			st = new StringTokenizer(br.readLine());
 			
 			char ch = st.nextToken().charAt(0);
-			int l = Integer.parseInt(st.nextToken()) + 1;
-			int r = Integer.parseInt(st.nextToken()) + 1;
+			int l = Integer.parseInt(st.nextToken());
+			int r = Integer.parseInt(st.nextToken());
 			
-			System.out.println(prefixSumCounts[ch - 'a'][r] - prefixSumCounts[ch - 'a'][l - 1]);
+			sb.append(prefixSumCounts[ch - 'a'][r + 1] - prefixSumCounts[ch - 'a'][l]).append("\n");
 		}
+		
+		System.out.print(sb);
 	}
 
 }
