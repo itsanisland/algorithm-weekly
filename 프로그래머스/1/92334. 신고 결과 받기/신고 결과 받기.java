@@ -2,7 +2,6 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] id_list, String[] report, int k) {
-        Map<String, Integer> reportedCnt = new HashMap<>();
         Map<String, Set<String>> reportingUser = new HashMap<>();
         
         for (String str : report) {
@@ -14,14 +13,12 @@ class Solution {
             
             set.add(from);
             reportingUser.put(to, set);
-            
-            reportedCnt.put(to, reportedCnt.getOrDefault(to, 0) + 1);
         }
         
         Map<String, Integer> mailedUser = new HashMap<>();
         
-        for (String reportedUser : reportedCnt.keySet()) {
-            if (reportedCnt.get(reportedUser) >= k) {
+        for (String reportedUser : reportingUser.keySet()) {
+            if (reportingUser.get(reportedUser).size() >= k) {
                 for (String user : reportingUser.get(reportedUser)) {
                     mailedUser.put(user, mailedUser.getOrDefault(user, 0) + 1);
                 }             
