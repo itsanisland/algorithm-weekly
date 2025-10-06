@@ -1,10 +1,10 @@
 # [level 2] [1차] 프렌즈4블록 - 17679 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/17679?language=java#) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/17679?language=java) 
 
 ### 성능 요약
 
-메모리: 88.5 MB, 시간: 7.59 ms
+메모리: 80.1 MB, 시간: 9.87 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 10월 06일 18:59:32
+2025년 10월 06일 20:15:42
 
 ### 문제 설명
 

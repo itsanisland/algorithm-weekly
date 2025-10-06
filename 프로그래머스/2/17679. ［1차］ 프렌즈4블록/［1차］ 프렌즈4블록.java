@@ -46,6 +46,10 @@ class Solution {
                 }
             }
             
+            if (cnt == 0) {
+                break;
+            }
+            
             // 2) 열 단위 패킹(중력)
             for (int c = 0; c < n; c++) {
                 int write = m - 1;
@@ -62,10 +66,6 @@ class Solution {
             
             for (int i = 0; i < m; i++) {
                 Arrays.fill(del[i], false);
-            }
-
-            if (cnt == 0) {
-                break;
             }
             
             answer += cnt;
