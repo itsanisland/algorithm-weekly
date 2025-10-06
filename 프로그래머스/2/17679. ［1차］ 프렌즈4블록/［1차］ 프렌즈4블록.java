@@ -69,7 +69,6 @@ class Solution {
             }
             
             answer += cnt;
-            System.out.println(cnt);
         }
         
         return answer;
