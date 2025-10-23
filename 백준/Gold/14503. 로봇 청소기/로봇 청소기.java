@@ -1,13 +1,11 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 	
-	private final static int[] DY = { -1, 0, 1, 0 };
+	private final static int[] DY = { -1, 0, 1, 0 }; // 북, 동, 남, 서 
 	private final static int[] DX = { 0, 1, 0, -1 };
 	
 	private static int N, M;
@@ -38,26 +36,19 @@ public class Main {
 			}
 		}
 		
-		System.out.println(bfs(r, c, d));
+		System.out.println(simulate(r, c, d));
 	}
 	
-	private static int bfs(int r, int c, int d) {
-		Queue<int[]> q = new ArrayDeque<>();
-		q.offer(new int[] { r, c, d });
-		
+	private static int simulate(int y, int x, int d) {
 		int cnt = 0;
 		
-		while (!q.isEmpty()) {
-			int[] cur = q.poll();
-			int y = cur[0], x = cur[1];
-			d = cur[2];
-			
+		while (true) {
 			if (!cleaned[y][x]) {
 				cleaned[y][x] = true;
 				cnt++;
 			}
 			
-			boolean flag = true;
+			boolean moved = false;
 			
 			int nd = d;
 			for (int i = 1; i <= 4; i++) {
@@ -67,25 +58,20 @@ public class Main {
 				
 				if (isValid(ny, nx) && map[ny][nx] == 0 && !cleaned[ny][nx]) {
 					// 전진 칸이 청소되지 않은 빈 칸인 경우 한 칸 전진
-					q.offer(new int[] { ny, nx, nd });
+					y = ny; x = nx; d = nd;
 					
-					flag = false;
+					moved = true;
 					break;
 				}
 			}
 			
-			if (flag) { // 청소되지 않은 빈칸이 없는 경우
+			if (!moved) { // 청소되지 않은 빈칸이 없는 경우
 				nd = (d + 2) % 4; // 후진
-				y += DY[nd];
-				x += DX[nd];
+				int ny = y + DY[nd], nx = x + DX[nd];
 				
-				if (isValid(y, x)) {
-					if (map[y][x] == 0) { // 후진할 수 있으면 한 칸 후진
-						q.offer(new int[] { y, x, d });
-					} else { // 후진할 수 없으면(벽) 작동 멈추기
-						break;
-					}
-				} else {
+				if (isValid(ny, nx) && map[ny][nx] == 0) { // 후진할 수 있으면 한 칸 후진
+					y = ny; x = nx;
+				} else { // 후진할 수 없으면(벽) 작동 멈추기
 					break;
 				}
 			} 
