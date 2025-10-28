@@ -3,26 +3,23 @@ import java.util.stream.*;
 
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        int answer = n - lost.length;
-        
         // Set 변환
-        Set<Integer> reserveSet = IntStream.of(reserve)
+        Set<Integer> reserveSet = Arrays.stream(reserve)
             .boxed()
             .collect(Collectors.toSet());
         
-        Set<Integer> lostSet = IntStream.of(lost)
+        Set<Integer> lostSet = Arrays.stream(lost)
             .boxed()
             .collect(Collectors.toSet());
         
-        Set<Integer> unionSet = IntStream.of(lost)
-            .boxed()
-            .collect(Collectors.toSet());
+        // 교집합
+        Set<Integer> common = new HashSet<>(lostSet);
+        common.retainAll(reserveSet);
         
-        unionSet.retainAll(reserveSet);
-        reserveSet.removeAll(unionSet);
-        lostSet.removeAll(unionSet);
+        reserveSet.removeAll(common);
+        lostSet.removeAll(common);
         
-        answer += unionSet.size();
+        int answer = n - lostSet.size(); // 진짜 잃어버린 학생 수
 
         // 앞, 뒤 확인
         for (int student : lostSet) {
