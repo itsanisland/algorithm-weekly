@@ -10,10 +10,9 @@ class Solution {
         W = List.of(words);
         visited = new boolean[words.length];
         
-        if (W.contains(target)) {
-            dfs(begin, target, 0);  
-            return min;
-        } else return 0;
+        dfs(begin, target, 0);
+        
+        return min == Integer.MAX_VALUE ? 0 : min;
     }
     
     private void dfs(String word, String target, int cnt) {
@@ -24,20 +23,18 @@ class Solution {
             return;
         }
         
-        for (int i = 0; i < word.length(); i++) {
-            for (int j = 0; j < W.size(); j++) {
-                int tmp = 0;
-                
-                for (int k = 0; k < word.length(); k++) {
-                    if (i == k) continue;
-                    if (word.charAt(k) == W.get(j).charAt(k)) tmp++;
-                }
-                
-                if (tmp == word.length() - 1 && !visited[j]) {
-                    visited[j] = true;
-                    dfs(W.get(j), target, cnt + 1);
-                    visited[j] = false;
-                }
+        // 한 글자 차이 판별 로직
+        for (int j = 0; j < W.size(); j++) {
+            int tmp = 0;
+
+            for (int k = 0; k < word.length(); k++) {
+                if (word.charAt(k) == W.get(j).charAt(k)) tmp++;
+            }
+
+            if (tmp == word.length() - 1 && !visited[j]) {
+                visited[j] = true;
+                dfs(W.get(j), target, cnt + 1);
+                visited[j] = false;
             }
         }
     }
