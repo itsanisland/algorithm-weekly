@@ -14,17 +14,18 @@ class Solution {
         answer = new String[N];
 
         for (int i = 0; i < tickets.length; i++) {
-            String to = tickets[i][0];
-            String from = tickets[i][1];
+            String from = tickets[i][0];
+            String to = tickets[i][1];
             
-            if (!map.contains(to)) {
-                map.add(to);
-            }
             if (!map.contains(from)) {
                 map.add(from);
             }
             
-            visited[map.indexOf(to)][map.indexOf(from)]++;
+            if (!map.contains(to)) {
+                map.add(to);
+            }
+            
+            visited[map.indexOf(from)][map.indexOf(to)]++;
         }
         
         dfs("ICN", new String[N], 0);
