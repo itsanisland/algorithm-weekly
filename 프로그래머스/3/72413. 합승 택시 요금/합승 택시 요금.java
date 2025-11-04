@@ -20,11 +20,13 @@ class Solution {
         }
         
         int[] distFromS = dijkstra(s, n);
+        int[] distFromA = dijkstra(a, n);
+        int[] distFromB = dijkstra(b, n);
+        
         int answer = distFromS[a] + distFromS[b];
         
         for (int k = 1; k <= n; k++) {
-            int[] distFromK = dijkstra(k, n);
-            answer = Math.min(answer, distFromS[k] + distFromK[a] + distFromK[b]);
+            answer = Math.min(answer, distFromA[k] + distFromB[k] + distFromS[k]);
         }
         
         return answer;
@@ -55,7 +57,7 @@ class Solution {
         return dist;
     }
     
-    private class Node implements Comparable<Node> {
+    private static class Node implements Comparable<Node> {
         int idx, cost;
         
         Node(int idx, int cost) {
