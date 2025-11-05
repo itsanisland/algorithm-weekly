@@ -1,122 +1,111 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-	
-	private static class Edge implements Comparable<Edge> {
-		int y, x;
-		int time;
+class Main {
 
-		public Edge(int y, int x, int time) {
-			this.y = y;
-			this.x = x;
-			this.time = time;
-		}
+    private static final int INF = Integer.MAX_VALUE;
+    private static final int[] DY = { -1, 1, 0, 0 };
+    private static final int[] DX = { 0, 0, -1, 1 };
 
-		@Override
-		public int compareTo(Edge o) {
-			return Integer.compare(this.time, o.time);
-		}
-	}
-	
-	private static final int INF = Integer.MAX_VALUE;
-	private static int[] dirY = { -1, 1, 0, 0 };
-	private static int[] dirX = { 0, 0, -1, 1 };
-	
-	private static int T, K, W, H;
-	private static Map<Character, Integer> time;
-	private static char[][] map;
+    private static int K, W, H;
+    private static char[][] map;
+    private static Map<Character, Integer> dMap;
+    private static int[][] dist;
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        int t = Integer.parseInt(br.readLine());
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		T = Integer.parseInt(br.readLine());
-		
-		for (int t = 0; t < T; t++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			
-			K = Integer.parseInt(st.nextToken());
-			W = Integer.parseInt(st.nextToken());
-			H = Integer.parseInt(st.nextToken());
-			
-			time = new HashMap<>();
-			map = new char[H][W];
-			
-			for (int i = 0; i < K; i++) {
-				st = new StringTokenizer(br.readLine());
-				
-				time.put(st.nextToken().charAt(0), Integer.parseInt(st.nextToken()));
-			}
-			
-			int r = 0, c = 0;
-			
-			for (int i = 0; i < H; i++) {
-				String row = br.readLine();
-				
-				for (int j = 0; j < W; j++) {
-					char ch = row.charAt(j);
-					map[i][j] = ch;
-					
-					if (ch == 'E') {
-						r = i; c = j;
-					}
-				}
-			}
-			
-			System.out.println(dijkstra(r, c));
-		}
-	}
-	
-	private static int dijkstra(int r, int c) {
-		PriorityQueue<Edge> pq = new PriorityQueue<>();
-		pq.offer(new Edge(r, c, 0));
-		
-		int[][] minTime = new int[H][W];
-		for (int i = 0; i < H; i++) Arrays.fill(minTime[i], INF);
-		minTime[r][c] = 0;
-		
-		while (!pq.isEmpty()) {
-			Edge cur = pq.poll();
-			
-			// 1) 오래된 상태 스킵
-	        if (cur.time > minTime[cur.y][cur.x]) continue;
+        while (t-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
 
-	        // 2) 경계 도달 시 조기 종료 : 가장 먼저 경계(탈출) 칸을 PQ에서 꺼냈을 때 그 비용이 최소
-	        if (cur.y == 0 || cur.y == H - 1 || cur.x == 0 || cur.x == W - 1) {
-	            return cur.time;
-	        }
+            K = Integer.parseInt(st.nextToken());
+            W = Integer.parseInt(st.nextToken());
+            H = Integer.parseInt(st.nextToken());
+    
+            map = new char[H][W];
+            dMap = new HashMap<>();
+            dist = new int[H][W];
+    
+            for (int i = 0; i < K; i++) {
+                st = new StringTokenizer(br.readLine());
+                char c = st.nextToken().charAt(0);
+                int d = Integer.parseInt(st.nextToken());
+                dMap.put(c, d);
+            }
+    
+            int sy = 0, sx = 0;
+            for (int i = 0; i < H; i++) {
+                String s = br.readLine();
+                Arrays.fill(dist[i], INF);
+                
+                for (int j = 0; j < W; j++) {
+                    map[i][j] = s.charAt(j);
+    
+                    if (map[i][j] == 'E') {
+                        sy = i; sx = j;
+                    }
+                }
+            }
+            
+            System.out.println(dijkstra(sy, sx));
+        }
+    }
 
-	        // 3) 인접 확장
-			for (int d = 0; d < 4; d++) {
-				int ny = cur.y + dirY[d];
-				int nx = cur.x + dirX[d];
-				
-				if (!isValid(ny, nx)) continue;
-				
-				char ch = map[ny][nx];
+    private static int dijkstra(int sy, int sx) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.offer(new Node(sy, sx, 0));
 
-	            // 지형 비용 없으면 통과 불가(또는 적절히 처리)
-	            if (!time.containsKey(ch)) continue;
+        boolean[][] visited = new boolean[H][W];
+        visited[sy][sx] = true;
+        
+        dist[sy][sx] = 0;
 
-	            int nt = cur.time + time.get(ch);
-				if (nt < minTime[ny][nx]) {
-					minTime[ny][nx] = nt;
-					pq.offer(new Edge(ny, nx, nt));
-				}
-			}
-		}
-		
-		// 탈출 불가한 경우
-	    return INF;
-	}
+        while (!pq.isEmpty()) {
+            Node from = pq.poll();
 
-	private static boolean isValid(int nextY, int nextX) {
-		return nextY >= 0 && nextY < H && nextX >= 0 && nextX < W;
-	}
+            if (from.w > dist[from.y][from.x]) continue;
+
+            // 경계 도달 시 조기 종료 : 가장 먼저 경계(탈출) 칸을 PQ에서 꺼냈을 때 그 비용이 최소
+            if (from.y == 0 || from.y == H - 1 || from.x == 0 || from.x == W - 1) {
+                return from.w;
+            } 
+            
+            for (int i = 0; i < 4; i++) {
+                int ny = from.y + DY[i], nx = from.x + DX[i];
+                
+                if (isValid(ny, nx) && !visited[ny][nx]) {
+                    visited[ny][nx] = true;
+                    
+                    int nd = from.w + dMap.get(map[ny][nx]);
+
+                    if (nd < dist[ny][nx]) {
+                        dist[ny][nx] = nd;
+                        pq.offer(new Node(ny, nx, nd));
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private static boolean isValid(int y, int x) {
+        return 0 <= y && y < H && 0 <= x && x < W;
+    }
+
+    private static class Node implements Comparable<Node> {
+        int y, x, w;
+
+        Node(int y, int x, int w) {
+            this.y = y;
+            this.x = x;
+            this.w = w;
+        }
+        
+        public int compareTo(Node o) {
+            return this.w - o.w;
+        }
+    }
 }
