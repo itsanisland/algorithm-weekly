@@ -39,10 +39,6 @@ class Main {
         PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.offer(new Node(a, 0, 0));
 
-        int[] dist = new int[n + 1];
-        Arrays.fill(dist, INF);
-        dist[a] = 0;
-
         int[] min = new int[n + 1];
         Arrays.fill(min, INF);
         
@@ -57,8 +53,7 @@ class Main {
                 int toW = from.w + to.w;
                 int max = Math.max(from.max, to.w);
 
-                if (toW <= c && max <= min[to.idx]) {
-                    dist[to.idx] = toW;
+                if (toW <= c && max < min[to.idx]) {
                     min[to.idx] = max;
                     pq.offer(new Node(to.idx, toW, max));
                 }
@@ -78,7 +73,7 @@ class Main {
         }
 
         public int compareTo(Node o) {
-            return this.w - o.w;
+            return this.max - o.max;
         }
     }
 }
