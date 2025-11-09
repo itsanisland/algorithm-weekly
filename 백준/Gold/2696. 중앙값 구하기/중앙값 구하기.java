@@ -10,8 +10,8 @@ class Main {
         while (t-- > 0) {
             int m = Integer.parseInt(br.readLine());
             
-            PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder()); // Left
-            PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // Right
+            PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder()); // Left(중앙값 이하)
+            PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // Right(중앙값 초과)
             List<Integer> list = new ArrayList<>();
             
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -24,10 +24,11 @@ class Main {
                 else minHeap.offer(num);
                 
                 // 균형 맞추기
+                // maxHeap의 크기 ≥ minHeap의 크기
                 if (maxHeap.size() > minHeap.size() + 1) minHeap.offer(maxHeap.poll());
                 if (minHeap.size() > maxHeap.size()) maxHeap.offer(minHeap.poll());
             
-                // 중앙값 기록 (홀수번째)
+                // 중앙값 기록(홀수번째)
                 if (i % 2 != 0) list.add(maxHeap.peek());
                 
                 if (i % 10 == 0) st = new StringTokenizer(br.readLine());
