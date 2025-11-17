@@ -6,21 +6,24 @@ class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        String rslt = "";
+        boolean ascending = true, descending = true;
+
         int prev = Integer.parseInt(st.nextToken());
         for (int i = 1; i < 8; i++) {
             int input = Integer.parseInt(st.nextToken());
 
-            if (prev == input - 1) rslt = "ascending";
-            else if (prev == input + 1) rslt = "descending";
-            else { 
-                rslt = "mixed";
-                break;
-            }
+            if (prev > input) ascending = false;
+            else descending = false;
 
             prev = input;
         }
 
-        System.out.println(rslt);
+        if (ascending) {
+            System.out.println("ascending");
+        } else if (descending) {
+            System.out.println("descending");
+        } else {
+            System.out.println("mixed");
+        }
     }
 }
