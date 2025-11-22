@@ -21,7 +21,8 @@ class Main {
             }
 
             if (sb.length() > 0) {
-                sb.deleteCharAt(sb.length() - 1);
+                // sb.deleteCharAt(sb.length() - 1); // 문자열에서 특정 위치의 문자 제거
+                sb.setLength(sb.length() - 1); // 문자열의 길이 설정
             }
             System.out.println("Pairs for " + n + ":" + sb);
         }
