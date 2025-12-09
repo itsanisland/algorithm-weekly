@@ -7,22 +7,24 @@ class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int a = Integer.parseInt(st.nextToken());
-        int b = Integer.parseInt(st.nextToken());
+        long a = Long.parseLong(st.nextToken());
+        long b = Long.parseLong(st.nextToken());
 
-        int temp = b;
         if (b < a) {
+            long temp = b;
             b = a;
             a = temp;
         }
 
-        String ans = "";
+        long count = (a == b) ? 0 : b - a - 1;
+        System.out.println(count);
 
-        for (int i = a + 1; i < b; i++) {
-            ans += i + " ";
+        if (count > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (long i = a + 1; i < b; i++) {
+                sb.append(i).append(" ");
+            }
+            System.out.println(sb);
         }
-
-        System.out.println(a == b ? 0 : b - a - 1);
-        System.out.println(ans);
     }
 }
