@@ -20,7 +20,6 @@ class Main {
             st = new StringTokenizer(br.readLine());
             w[i] = Integer.parseInt(st.nextToken());
             v[i] = Integer.parseInt(st.nextToken());
-            
         }
 
         int[][] dp = new int[n + 1][k + 1];
