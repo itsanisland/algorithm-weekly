@@ -1,32 +1,22 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-	
-	private static int N;
-	private static int[] array;
-	private static long result = 0;
+class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		N = Integer.parseInt(br.readLine());
-		
-		array = new int[N];
-		
-		for (int i = 0; i < N; i++) {
-			array[i] = Integer.parseInt(br.readLine());
-		}
-		
-		Arrays.sort(array);
-		
-		for (int i = 0; i < N; i++) {
-			result += Math.abs(array[i] - (i + 1));
-		}
-		
-		System.out.println(result);
-	}
+        int n = Integer.parseInt(br.readLine());
 
+        int[] arr = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
+        }
+
+        Arrays.sort(arr);
+
+        long ans = 0;
+        for (int i = 1; i <= n; i++) ans += Math.abs(arr[i] - i);
+
+        System.out.println(ans);
+    }
 }
