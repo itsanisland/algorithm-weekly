@@ -7,30 +7,30 @@ class Main {
 
         String s = br.readLine();
 
-        String ans = "";
+        StringBuffer ans = new StringBuffer();
         StringBuffer tmp = new StringBuffer();
         boolean ck = false;
         
         for (char c : s.toCharArray()) {
             if (c == '<') {
                 if (tmp.length() > 0) {
-                    ans += tmp.reverse().toString();
+                    ans.append(tmp.reverse());
                     tmp.setLength(0);
                 }
                 ck = true;
-                ans += c;
+                ans.append(c);
             } else if (c == '>') {
-                ans += c;
+                ans.append(c);
                 ck = false;
             } else if (c == ' ') {
                 if (tmp.length() > 0) {
-                    ans += tmp.reverse().toString();
+                    ans.append(tmp.reverse());
                     tmp.setLength(0);
                 }
-                ans += ' ';
+                ans.append(' ');
             } else {
                 if (ck) {
-                    ans += c;
+                    ans.append(c);
                 } else {
                     tmp.append(c);
                 }
@@ -38,7 +38,7 @@ class Main {
         }
 
         if (tmp.length() > 0) {
-            ans += tmp.reverse().toString();
+            ans.append(tmp.reverse());
             tmp.setLength(0);
         }
 
