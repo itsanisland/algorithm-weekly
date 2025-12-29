@@ -3,8 +3,8 @@ import java.io.*;
 
 class Main {
 
-    public final static int[] DY = { -1, 1, 0, 0 };
-    public final static int[] DX = { 0, 0, -1, 1 };
+    public final static int[] DY = { 0, -1, 1, 0, 0 };
+    public final static int[] DX = { 0, 0, 0, -1, 1 };
 
     public static int n, min = 3_000;
     public static int[][] map;
@@ -14,41 +14,44 @@ class Main {
         return 0 <= y && y < n && 0 <= x && x < n;
     }
 
-    public static int flower(int p) {
-        // 1차원 -> 2차원
-        int y = p / n;
-        int x = p % n;
-
-        visited[y][x] = true;
-
-        int sum = map[y][x];
-        for (int i = 0; i < 4; i++) {
+    public static int flower(int y, int x, boolean v) {
+        int sum = 0;
+        for (int i = 0; i < 5; i++) {
             int ny = y + DY[i];
             int nx = x + DX[i];
 
-            if (isValid(ny, nx)) {
-                if (visited[ny][nx]) {
-                    return 3_000;
-                }
-                sum += map[ny][nx];
-                visited[ny][nx] = true;
-            } else {
-                return 3_000;
-            }
+            sum += map[ny][nx];
+            visited[ny][nx] = v;
         }
-
         return sum;
     }
 
-    public static void solve(int i, int j, int k) {
-        visited = new boolean[n][n];
-        
-        int sum = 0;
-        sum += flower(i);
-        sum += flower(j);
-        sum += flower(k);
+    public static boolean isVisited(int y, int x) {
+        for (int i = 0; i < 5; i++) {
+            int ny = y + DY[i];
+            int nx = x + DX[i];
 
-        min = Math.min(min, sum);
+            if (visited[ny][nx]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void dfs(int cnt, int sum) {
+        if (cnt == 3) {
+            min = Math.min(min, sum);
+            return;
+        }
+        
+        for (int y = 1; y < n - 1; y++) {
+            for (int x = 1; x < n - 1; x++) {
+                if (!isVisited(y, x)) {
+                    dfs(cnt + 1, sum + flower(y, x, true));
+                    flower(y, x, false);
+                }
+            }
+        }
     }
     
     public static void main(String[] args) throws IOException {
@@ -57,6 +60,7 @@ class Main {
         n = Integer.parseInt(br.readLine());
 
         map = new int[n][n];
+        visited = new boolean[n][n];
 
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -65,15 +69,7 @@ class Main {
             }
         }
 
-        // 위치 3군데 뽑기
-        // 2차원 데이터를 하나의 값으로 표현
-        for (int i = 0; i < n * n; i++) {
-            for (int j = i + 1; j < n * n; j++) {
-                for (int k = j + 1; k < n * n; k++) {
-                    solve(i, j, k);
-                }
-            }
-        }
+        dfs(0, 0);
 
         System.out.println(min);
     }
