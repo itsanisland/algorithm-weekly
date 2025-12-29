@@ -39,6 +39,10 @@ class Main {
     }
 
     public static void dfs(int cnt, int sum) {
+        if (min < sum) {
+            return;
+        }
+        
         if (cnt == 3) {
             min = Math.min(min, sum);
             return;
