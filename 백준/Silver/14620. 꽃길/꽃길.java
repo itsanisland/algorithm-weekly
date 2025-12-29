@@ -68,8 +68,8 @@ class Main {
         // 위치 3군데 뽑기
         // 2차원 데이터를 하나의 값으로 표현
         for (int i = 0; i < n * n; i++) {
-            for (int j = 0; j < n * n; j++) {
-                for (int k = 0; k < n * n; k++) {
+            for (int j = i + 1; j < n * n; j++) {
+                for (int k = j + 1; k < n * n; k++) {
                     solve(i, j, k);
                 }
             }
