@@ -10,10 +10,6 @@ class Main {
     public static boolean[][] map;
     public static boolean[][] visited;
 
-    public static boolean isValid(int y, int x) {
-        return 0 <= y && y < n && 0 <= x && x < m;
-    }
-
     public static void bfs(int y, int x) {
         Queue<int[]> q = new ArrayDeque<>();
         q.offer(new int[] { y, x });
@@ -28,7 +24,7 @@ class Main {
                 int ny = cy + DY[i];
                 int nx = cx + DX[i];
 
-                if (isValid(ny, nx) && map[ny][nx] && !visited[ny][nx]) {
+                if (map[ny][nx] && !visited[ny][nx]) {
                     visited[ny][nx] = true;
                     q.offer(new int[] { ny, nx });
                 }
@@ -47,20 +43,20 @@ class Main {
             n = Integer.parseInt(st.nextToken());
             int k = Integer.parseInt(st.nextToken());
             
-            map = new boolean[n][m];
-            visited = new boolean[n][m];
+            map = new boolean[n + 2][m + 2];
+            visited = new boolean[n + 2][m + 2];
     
             for (int i = 0; i < k; i++) {
                 st = new StringTokenizer(br.readLine());
                 int x = Integer.parseInt(st.nextToken());
                 int y = Integer.parseInt(st.nextToken());
-                map[y][x] = true;
+                map[y + 1][x + 1] = true;
             }
 
             int ans = 0;
             
-            for (int y = 0; y < n; y++) {
-                for (int x = 0; x < m; x++) {
+            for (int y = 1; y <= n; y++) {
+                for (int x = 1; x <= m; x++) {
                     if (map[y][x] && !visited[y][x]) {
                         ans++;
                         bfs(y, x);
