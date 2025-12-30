@@ -8,60 +8,53 @@ class Main {
 
     public static int n, k;
     public static int[][] map;
-    public static boolean[][] visited;
+    public static boolean[][] visited, visitedCnt;
 
-    public static int bfs(int y, int x, int c, boolean r) {
-        Queue<int[]> q = new ArrayDeque<>();
-        q.offer(new int[] { y, x });
-
-        boolean[][] visitedCnt = new boolean[n + 2][12];
+    public static int dfsCnt(int y, int x) {
+        int ret = 1;
         visitedCnt[y][x] = true;
+        
+        for (int i = 0; i < 4; i++) {
+            int ny = y + DY[i];
+            int nx = x + DX[i];
 
-        if (r) {
-            map[y][x] = 0;
-            visited[y][x] = true;
+            if (visitedCnt[ny][nx] || map[y][x] != map[ny][nx]) continue;
+            ret += dfsCnt(ny, nx);
         }
+        return ret;
+    }
 
-        int cnt = 1;
+    public static void dfsRemove(int y, int x, int c) {
+        visited[y][x] = true;
+        map[y][x] = 0;
+        
+        for (int i = 0; i < 4; i++) {
+            int ny = y + DY[i];
+            int nx = x + DX[i];
 
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
-            int cy = cur[0];
-            int cx = cur[1];
-
-            for (int i = 0; i < 4; i++) {
-                int ny = cy + DY[i];
-                int nx = cx + DX[i];
-
-                if (map[ny][nx] == c && !visitedCnt[ny][nx]) {
-                    visitedCnt[ny][nx] = true;
-                    if (r) {
-                        map[ny][nx] = 0;
-                        visited[ny][nx] = true;
-                    }
-                    q.offer(new int[] { ny, nx });
-                    cnt++;
-                }
-            }
+            if (visited[ny][nx] || map[ny][nx] != c) continue;
+            dfsRemove(ny, nx, c);
         }
-
-        return cnt;
     }
 
     public static boolean check() {
         visited = new boolean[n + 2][12];
         boolean ret = false;
+        
         for (int i = 1; i < n + 1; i++) {
             for (int j = 1; j < 11; j++) {
                 if (map[i][j] > 0 && !visited[i][j]) {
-                    int cnt = bfs(i, j, map[i][j], false);
+                    visitedCnt = new boolean[n + 2][12];
+                    int cnt = dfsCnt(i, j);
+                    
                     if (cnt >= k) {
-                        bfs(i, j, map[i][j], true);
+                        dfsRemove(i, j, map[i][j]);
                         ret = true;
                     }
                 }
             }
         }
+        
         return ret;
     }
 
