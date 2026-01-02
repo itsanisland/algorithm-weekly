@@ -11,26 +11,37 @@ class Main {
     public static int[] selected;
     public static boolean[] visited;
 
-    public static int[][] rotate(int idx, int[][] arr) {
-        int r = rot[idx][0] - 1, c = rot[idx][1] - 1, s = rot[idx][2];
-
-        int[][] newArr = new int[n][m];
-        for (int i = 0; i < n; i++) {
-            newArr[i] = arr[i].clone();
+    public static void rotate(int idx, int[][] arr) {
+        int r = rot[idx][0] - 1;
+        int c = rot[idx][1] - 1;
+        int s = rot[idx][2];
+    
+        for (int layer = 1; layer <= s; layer++) {
+            int top = r - layer;
+            int left = c - layer;
+            int bottom = r + layer;
+            int right = c + layer;
+    
+            int temp = arr[top][left];
+    
+            // left column ↑
+            for (int i = top; i < bottom; i++)
+                arr[i][left] = arr[i + 1][left];
+    
+            // bottom row ←
+            for (int i = left; i < right; i++)
+                arr[bottom][i] = arr[bottom][i + 1];
+    
+            // right column ↓
+            for (int i = bottom; i > top; i--)
+                arr[i][right] = arr[i - 1][right];
+    
+            // top row →
+            for (int i = right; i > left + 1; i--)
+                arr[top][i] = arr[top][i - 1];
+    
+            arr[top][left + 1] = temp;
         }
-        
-        for (int i = 1; i < s + 1; i++) { // 오른쪽-위 대각선
-            int rr = r - i, cc = c + i; // 현재 위치
-            for (int d = 0; d < 4; d++) {
-                for (int j = 0; j < i * 2; j++) {
-                    int rrr = rr + DY[d], ccc = cc + DX[d]; // 다음 위치
-                    newArr[rrr][ccc] = arr[rr][cc];
-                    rr = rrr; cc = ccc;
-                }
-            }
-        }
-
-        return newArr;
     }
 
     public static int getMin(int[][] arr) {
@@ -52,7 +63,7 @@ class Main {
                 cp[i] = a[i].clone();
             }
             for (int idx : selected) {
-                cp = rotate(idx, cp);
+                rotate(idx, cp);
             }
             ans = Math.min(ans, getMin(cp));
             return;
