@@ -6,10 +6,14 @@ class Main {
     public static int n, ans;
     public static int[][] a, dp;
 
+    // (r, c)에서 시작해서
+    // 삼각형 맨 아래까지 내려갔을 때
+    // 얻을 수 있는 최대 합
     public static int dfs(int r, int c) {
         // 이미 계산된 상태라면 바로 반환
         if (dp[r][c] != - 1) return dp[r][c];
 
+        // 맨 아래 줄이라면 더 내려갈 수 없으므로 그 칸의 값 자체가 최댓값
         if (r == n - 1) return dp[r][c] = a[r][c];
 
         int down = dfs(r + 1, c);
