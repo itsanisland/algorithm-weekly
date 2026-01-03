@@ -10,7 +10,7 @@ class Main {
         int m = Integer.parseInt(st.nextToken());
         int[][] a = new int[n + 1][m + 1];
 
-        // dp[i][j]: (1,1) ~ (i,j) 까지의 합
+        // dp[i][j]: (1,1)부터 (i,j)까지의 부분합
         // 0 0 0 0
         // 0 1 3 7
         // 0 9 27 63 
@@ -20,7 +20,10 @@ class Main {
             st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= m; j++) {
                 a[i][j] = Integer.parseInt(st.nextToken());
-                dp[i][j] = dp[i - 1][j] + dp[i][j - 1] - dp[i - 1][j - 1] + a[i][j];
+                dp[i][j] = dp[i - 1][j]
+                         + dp[i][j - 1]
+                         - dp[i - 1][j - 1]
+                         + a[i][j];
             }
         }
 
@@ -33,9 +36,10 @@ class Main {
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
 
+            // 2차원 누적합 공식
             int ans = dp[x][y]
-                    - dp[i - 1][y] // 위쪽 제거
-                    - dp[x][j - 1] // 왼쪽 제거
+                    - dp[i - 1][y]      // 위쪽에서 구한 누적합 제거
+                    - dp[x][j - 1]      // 왼쪽에서 구한 누적합 제거
                     + dp[i - 1][j - 1]; // 두 번 제거된 영역 복구
             
             System.out.println(ans);
