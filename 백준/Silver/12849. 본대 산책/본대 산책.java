@@ -4,8 +4,9 @@ import java.io.*;
 class Main {
 
     public static final long MOD = 1_000_000_007L;
+    public static long[] dp;
 
-    public static long[] next(long[] state) {
+    public static void next(long[] state) {
         long[] tmp = new long[8];
         tmp[0] = (state[1] + state[2]) % MOD;
         tmp[1] = (state[0] + state[2] + state[3]) % MOD;
@@ -15,18 +16,18 @@ class Main {
         tmp[5] = (state[3] + state[4] + state[7]) % MOD;
         tmp[6] = (state[4] + state[7]) % MOD;
         tmp[7] = (state[5] + state[6]) % MOD;
-        return tmp;
+        dp = tmp;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
         int d = Integer.parseInt(br.readLine());
-
-        long[] dp = new long[8];
+        dp = new long[8];
         dp[0] = 1;
 
         while (d-- > 0) {
-            dp = next(dp);
+            next(dp);
         }
 
         System.out.println(dp[0] % MOD);
