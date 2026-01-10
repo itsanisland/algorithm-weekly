@@ -4,30 +4,21 @@ import java.io.*;
 class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         String s = br.readLine();
-
-        int zeroCnt = 0; // 전부 0으로 바꾸는 경우
-        int oneCnt = 0;  // 전부 1로 바꾸는 경우
-
-        if (s.charAt(0) == '1') {
-            zeroCnt++;
-        } else {
-            oneCnt++;
-        }
-
-        for (int i = 0; i < s.length() - 1; i++) {
-            int prev = s.charAt(i);
-            int next = s.charAt(i + 1);
-            if (prev != next) {
-                if (next == '1') { // 01
+        int zeroCnt = 0, oneCnt = 0;
+        char cur = ' ';
+        
+        for (char c : s.toCharArray()) {
+            if (c != cur) {
+                if (c == '0') {
                     zeroCnt++;
-                } else { // 10
+                } else {
                     oneCnt++;
                 }
             }
+            cur = c;
         }
-
+        
         System.out.println(Math.min(zeroCnt, oneCnt));
     }
 }
