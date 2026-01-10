@@ -5,20 +5,14 @@ class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String s = br.readLine();
-        int zeroCnt = 0, oneCnt = 0;
-        char cur = ' ';
+        int tot = 0;
         
-        for (char c : s.toCharArray()) {
-            if (c != cur) {
-                if (c == '0') {
-                    zeroCnt++;
-                } else {
-                    oneCnt++;
-                }
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i - 1) != s.charAt(i)) {
+                tot++;
             }
-            cur = c;
         }
         
-        System.out.println(Math.min(zeroCnt, oneCnt));
+        System.out.println((tot + 1) / 2);
     }
 }
