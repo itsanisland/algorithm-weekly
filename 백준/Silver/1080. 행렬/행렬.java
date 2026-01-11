@@ -4,12 +4,12 @@ import java.io.*;
 class Main {
 
     public static int N, M;
-    public static boolean[][] A, B;
+    public static int[][] A, B;
 
     public static void flip(int y, int x) {
-        for (int i = y; i < y + 3; i++) {
-            for (int j = x; j < x + 3; j++) {
-                A[i][j] = !A[i][j];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                A[y + i][x + j] ^= 1; // 토글
             }
         }
     }
@@ -30,20 +30,20 @@ class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        A = new boolean[N][M];
-        B = new boolean[N][M];
+        A = new int[N][M];
+        B = new int[N][M];
         
         for (int i = 0; i < N; i++) {
             String s = br.readLine();
             for (int j = 0; j < M; j++) {
-                A[i][j] = s.charAt(j) == '1';
+                A[i][j] = s.charAt(j) - '0';
             }
         }
 
         for (int i = 0; i < N; i++) {
             String s = br.readLine();
             for (int j = 0; j < M; j++) {
-                B[i][j] = s.charAt(j) == '1';
+                B[i][j] = s.charAt(j) - '0';
             }
         }
 
