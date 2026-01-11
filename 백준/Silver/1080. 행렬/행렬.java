@@ -6,7 +6,7 @@ class Main {
     public static int N, M;
     public static boolean[][] A, B;
 
-    public static void reverse(int y, int x) {
+    public static void flip(int y, int x) {
         for (int i = y; i < y + 3; i++) {
             for (int j = x; j < x + 3; j++) {
                 A[i][j] = !A[i][j];
@@ -47,17 +47,11 @@ class Main {
             }
         }
 
-        if ((N < 3 || M < 3) && !isSame()) {
-            System.out.println(-1);
-            return;
-        }
-
         int cnt = 0;
-        boolean flag = false;
         for (int i = 0; i <= N - 3; i++) {
             for (int j = 0; j <= M - 3; j++) {
                 if (A[i][j] != B[i][j]) {
-                    reverse(i, j);
+                    flip(i, j);
                     cnt++;
                 }
             }
