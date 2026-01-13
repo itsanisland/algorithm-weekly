@@ -49,17 +49,21 @@ class Main {
         int ty = 1, tx = 1; // 꼬리
         
         while (true) {
+            if (C[sec] == 'D') {
+                dir++;
+                dir %= 4;
+            } else if (C[sec] == 'L') {
+                dir += 3;
+                dir %= 4;
+            }
+            D[hy][hx] = dir;
+
             hy += DY[dir]; hx += DX[dir];
+
             sec++;
 
             if (B[hy][hx] == '#' || B[hy][hx] == 'S') {
                 break;
-            }
-            
-            if (C[sec] == 'D') {
-                dir = (dir + 1) % 4;
-            } else if (C[sec] == 'L') {
-                dir = (dir + 3) % 4;
             }
 
             if (B[hy][hx] == '.') {
@@ -69,7 +73,6 @@ class Main {
             }
             
             B[hy][hx] = 'S';
-            D[hy][hx] = dir;
         }
 
         System.out.println(sec);
