@@ -1,45 +1,48 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Main {
+public class Main {
 
-    private final static int[] DY = {0, 0, 0, -1, 1};
-    private final static int[] DX = {0, 1, -1, 0, 0};
+    public final static int[] DY = {0, 0, 0, -1, 1};
+    public final static int[] DX = {0, 1, -1, 0, 0};
+    
+    public static int[] dice = new int[6];
 
-    // 각 주사위 면에 적힌 숫자
-    // 인덱스 의미 -> 1: 위, 2: 북, 3: 서, 4: 동, 5: 남, 6: 아래
-    private final static int[] D = new int[7];
-
-    public static void roll(int dir) {
-        int tmp = D[1];
-        if (dir == 1) { // 동
-            // 위 -> 동 -> 아래 -> 서 -> 위
-            D[1] = D[3];
-            D[3] = D[6];
-            D[6] = D[4];
-            D[4] = tmp;
-        } else if (dir == 2) { // 서
-            // 위 -> 서 -> 아래 -> 동 -> 위
-            D[1] = D[4];
-            D[4] = D[6];
-            D[6] = D[3];
-            D[3] = tmp;
-        } else if (dir == 3) { // 북
-            // 위 -> 북 -> 아래 -> 남 -> 위
-            D[1] = D[5];
-            D[5] = D[6];
-            D[6] = D[2];
-            D[2] = tmp;
-        } else { // 남
-            // 위 -> 남 -> 아래 -> 북 -> 위
-            D[1] = D[2];
-            D[2] = D[6];
-            D[6] = D[5];
-            D[5] = tmp;
+    public static void roll(int d) {
+        int tmp;
+        switch (d) {
+            case 1:
+                tmp = dice[3];
+                dice[3] = dice[5];
+                dice[5] = dice[2];
+                dice[2] = dice[0];
+                dice[0] = tmp;
+                break;
+            case 2:
+                tmp = dice[5];
+                dice[5] = dice[3];
+                dice[3] = dice[0];
+                dice[0] = dice[2];
+                dice[2] = tmp;
+                break;
+            case 3:
+                tmp = dice[5];
+                dice[5] = dice[1];
+                dice[1] = dice[0];
+                dice[0] = dice[4];
+                dice[4] = tmp;
+                break;
+            case 4:
+                tmp = dice[1];
+                dice[1] = dice[5];
+                dice[5] = dice[4];
+                dice[4] = dice[0];
+                dice[0] = tmp;
+                break;
         }
     }
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -61,26 +64,26 @@ class Main {
         st = new StringTokenizer(br.readLine());
         
         for (int i = 0; i < K; i++) {
-            int dir = Integer.parseInt(st.nextToken());
+            int d = Integer.parseInt(st.nextToken());
 
-            int ny = y + DY[dir];
-            int nx = x + DX[dir];
+            int ny = y + DY[d];
+            int nx = x + DX[d];
 
             if (ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
 
-            roll(dir);
-            
+            roll(d);
+
             if (map[ny][nx] == 0) {
-                map[ny][nx] = D[6];
+                map[ny][nx] = dice[5];
             } else {
-                D[6] = map[ny][nx];
+                dice[5] = map[ny][nx];
                 map[ny][nx] = 0;
             }
-            
+
+            System.out.println(dice[0]);
+
             y = ny;
             x = nx;
-            
-            System.out.println(D[1]);
         }
     }
 }
