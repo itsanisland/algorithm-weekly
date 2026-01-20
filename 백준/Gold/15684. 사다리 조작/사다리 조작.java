@@ -26,18 +26,16 @@ class Main {
             answer = cnt;
             return;
         }
-    
-        for (int idx = start; idx < H * (N - 1); idx++) {
-            int i = idx / (N - 1) + 1;
-            int j = idx % (N - 1) + 1;
-    
-            if (ladder[i][j]) continue;
-            if (j > 1 && ladder[i][j - 1]) continue;
-            if (j < N - 1 && ladder[i][j + 1]) continue;
-    
-            ladder[i][j] = true;
-            dfs(cnt + 1, idx + 1);
-            ladder[i][j] = false;
+
+        for (int i = start; i <= H; i++) {
+            for (int j = 1; j < N; j++) {
+                // 현재 위치, 왼쪽, 오른쪽에 이미 사다리가 있으면 설치 불가
+                if (ladder[i][j] || ladder[i][j - 1] || ladder[i][j + 1]) continue;
+
+                ladder[i][j] = true;      // 사다리 심기
+                dfs(cnt + 1, i);         // 재귀 호출 (현재 행 i부터 탐색하도록 최적화)
+                ladder[i][j] = false;      // 사다리 뽑기 (복구)
+            }
         }
     }
     
@@ -59,7 +57,7 @@ class Main {
             }
         }
 
-        dfs(0, 0);
+        dfs(0, 1); // 1행부터 시작
 
         System.out.println(answer == 4 ? -1 : answer);
     }
