@@ -42,7 +42,15 @@ class Main {
                 int nr = r;
                 int nc = c;
 
-                for (int i = 0; i < shark.s; i++) {
+                int speed = shark.s;
+
+                if (shark.d == 1 || shark.d == 2) {
+                    speed %= (R - 1) * 2;
+                } else {
+                    speed %= (C - 1) * 2;
+                }
+
+                for (int i = 0; i < speed; i++) {
                     if (nr + DY[shark.d] < 1 || nr + DY[shark.d] > R) { // 상 <-> 하
                         shark.d = (shark.d == 1) ? 2 : 1;
                     }
