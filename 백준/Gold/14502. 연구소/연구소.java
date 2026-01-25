@@ -7,7 +7,7 @@ class Main {
     static final int[] DX = {0, 0, 1, -1};
     
     static int N, M, ans;
-    static List<int[]> empty, virus;
+    static List<int[]> empty, virus; // 빈 칸(조합 선택 가능), 바이러스 따로 관리(전체 맵 탐색 X)
     static int[][] map;
 
     static void spreadVirus() {
@@ -15,9 +15,13 @@ class Main {
         
         Queue<int[]> q = new ArrayDeque<>();
         for (int[] v : virus) q.offer(v);
+
+        int cnt = 0; // 감염 수
         
         while (!q.isEmpty()) {
             int[] cur = q.poll();
+            visited[cur[0]][cur[1]] = true;
+            
             for (int i = 0; i < 4; i++) {
                 int ny = cur[0] + DY[i];
                 int nx = cur[1] + DX[i];
@@ -27,16 +31,11 @@ class Main {
                 
                 q.offer(new int[] {ny, nx});
                 visited[ny][nx] = true;
+                cnt++;
             }
         }
 
-        int cnt = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (map[i][j] == 0 && !visited[i][j]) cnt++;
-            }
-        }
-        
+        cnt = empty.size() - 3 - cnt;
         ans = Math.max(ans, cnt);
     }
 
@@ -49,9 +48,9 @@ class Main {
         for (int i = start; i < empty.size(); i++) {
             int[] selected = empty.get(i);
 
-            map[selected[0]][selected[1]] = 1;
+            map[selected[0]][selected[1]] = 1; // 벽 설치
             dfs(i + 1, cnt + 1);
-            map[selected[0]][selected[1]] = 0;
+            map[selected[0]][selected[1]] = 0; // 원상복구
         }
     }
     
