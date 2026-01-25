@@ -30,7 +30,7 @@ class Main {
     }
 
     static void moveSharks() {
-        // 새로운 상어 배열 필요(아직 안 움직인 상어들과 충돌)
+        // 새로운 상어 배열 필요(아직 안 움직인 상어들과 충돌, 동시 이동 처리)
         Shark[][] tmp = new Shark[R + 1][C + 1];
         
         for (int r = 1; r <= R; r++) {
@@ -44,6 +44,9 @@ class Main {
 
                 int speed = shark.s;
 
+                // 1 → 2 → 3 → 4 → 3 → 2 → 1
+                // 총 이동 횟수 = (R - 1) × 2 일 때, 제자리로 돌아옴 -> 주기
+                // 실제 의미 있는 이동은 주기를 넘고 남은 횟수만큼만 이동
                 if (shark.d == 1 || shark.d == 2) {
                     speed %= (R - 1) * 2;
                 } else {
@@ -76,17 +79,6 @@ class Main {
         sharks = tmp;
     }
 
-    static void print() {
-        for (int r = 1; r <= R; r++) {
-            for (int c = 1; c <= C; c++) {
-                Shark shark = sharks[r][c];
-                System.out.print(shark == null ? 0 : 1);
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
