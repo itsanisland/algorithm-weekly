@@ -3,81 +3,79 @@ import java.io.*;
 
 class Main {
 
-    static int[][] A = new int[200][200];
+    static int[][] A = new int[100][100];
     static int R = 3, C = 3;
 
     static void operateR() {
-        // 등장 횟수 세기
-        Map<Integer, Integer>[] map = new HashMap[R];
-        for (int i = 0; i < R; i++) map[i] = new HashMap<>();
-
+        int maxLen = C;
+        
         for (int i = 0; i < R; i++) {
+            // 등장 횟수 세기
+            int[] cnt = new int[101];
+    
             for (int j = 0; j < C; j++) {
-                int num = A[i][j];
-                if (num == 0) continue;
-                map[i].put(num, map[i].getOrDefault(num, 0) + 1);
+                cnt[A[i][j]]++;
             }
-        }
-
-        // 정렬
-        for (int i = 0; i < R; i++) {
-            Map<Integer, Integer> m = map[i];
-            List<Integer> keySet = new ArrayList<>(m.keySet());
             
-            Collections.sort(keySet, new Comparator<Integer>() {
-                public int compare(Integer o1, Integer o2) {
-                    if (m.get(o1) == m.get(o2)) return o1 - o2;
-                    return m.get(o1) - m.get(o2);
-                }
-            });
+            List<Integer> list = new ArrayList<>();
+            for (int j = 1; j <= 100; j++) {
+                if (cnt[j] == 0) continue;
+                list.add(j);
+            }
 
+            // 정렬
+            list.sort((a, b) -> {
+                if (cnt[a] == cnt[b]) return a - b;
+                return cnt[a] - cnt[b];
+            });
+            
             for (int j = 0; j < C; j++) A[i][j] = 0;
             
-            for (int j = 0; j < keySet.size(); j++) {
-                int key = keySet.get(j);
-                A[i][j * 2] = key;
-                A[i][j * 2 + 1] = m.get(key);
+            for (int j = 0; j < list.size(); j++) {
+                A[i][j * 2] = list.get(j);
+                A[i][j * 2 + 1] = cnt[list.get(j)];
             }
-
-            C = Math.max(C, keySet.size() * 2);
+            
+            maxLen = Math.max(maxLen, list.size() * 2);
         }
+
+        C = Math.max(C, maxLen);
     }
 
     static void operateC() {
-        // 등장 횟수 세기
-        Map<Integer, Integer>[] map = new HashMap[C];
-        for (int i = 0; i < C; i++) map[i] = new HashMap<>();
-
+        int maxLen = R;
+        
         for (int i = 0; i < C; i++) {
+            // 등장 횟수 세기
+            int[] cnt = new int[101];
+    
             for (int j = 0; j < R; j++) {
-                int num = A[j][i];
-                if (num == 0) continue;
-                map[i].put(num, map[i].getOrDefault(num, 0) + 1);
+                cnt[A[j][i]]++;
             }
-        }
-
-        // 정렬
-        for (int i = 0; i < C; i++) {
-            Map<Integer, Integer> m = map[i];
-            List<Integer> keySet = new ArrayList<>(m.keySet());
             
-            Collections.sort(keySet, new Comparator<Integer>() {
-                public int compare(Integer o1, Integer o2) {
-                    if (m.get(o1) == m.get(o2)) return o1 - o2;
-                    return m.get(o1) - m.get(o2);
-                }
-            });
+            List<Integer> list = new ArrayList<>();
+            for (int j = 1; j <= 100; j++) {
+                if (cnt[j] == 0) continue;
+                list.add(j);
+            }
 
+            // 정렬
+            list.sort((a, b) -> {
+                if (cnt[a] == cnt[b]) return a - b;
+                return cnt[a] - cnt[b];
+            });
+            
             for (int j = 0; j < R; j++) A[j][i] = 0;
             
-            for (int j = 0; j < keySet.size(); j++) {
-                int key = keySet.get(j);
-                A[j * 2][i] = key;
-                A[j * 2 + 1][i] = m.get(key);
+            for (int j = 0; j < list.size(); j++) {
+                A[j * 2][i] = list.get(j);
+                A[j * 2 + 1][i] = cnt[list.get(j)];
             }
-
-            R = Math.max(R, keySet.size() * 2);
+            
+            maxLen = Math.max(maxLen, list.size() * 2);
         }
+
+        R = Math.max(R, maxLen);
     }
     
     public static void main(String[] args) throws IOException {
