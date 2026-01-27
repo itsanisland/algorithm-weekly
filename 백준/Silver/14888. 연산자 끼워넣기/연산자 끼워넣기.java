@@ -4,11 +4,11 @@ import java.io.*;
 class Main {
 
     static int N;
-    static long min = 1_000_000_000, max = -1_000_000_000;
+    static int min = 1_000_000_000, max = -1_000_000_000;
     static int[] num;
     static int[] op = new int[4];
 
-    static void dfs(int cnt, long rslt) {
+    static void dfs(int cnt, int rslt) {
         if (cnt == N) {
             max = Math.max(max, rslt);
             min = Math.min(min, rslt);
