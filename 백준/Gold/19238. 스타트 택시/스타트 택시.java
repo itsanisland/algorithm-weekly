@@ -3,97 +3,102 @@ import java.io.*;
 
 class Main {
 
-    static class Guest implements Comparable<Guest> {
-        int sy, sx, dy, dx, dist;
-
-        Guest(int sy, int sx, int dy, int dx, int dist) {
+    static class Guest {
+        int sy, sx, dy, dx;
+        Guest(int sy, int sx, int dy, int dx) {
             this.sy = sy; this.sx = sx;
             this.dy = dy; this.dx = dx;
-            this.dist = dist;
-        }
-
-        public int compareTo(Guest o) {
-            if (this.dist == o.dist) {
-                if (this.sy == o.sy) return this.sx - o.sx;
-                return this.sy - o.sy;
-            }
-            return this.dist - o.dist;
         }
     }
 
-    static final int[] DY = {-1, 1, 0, 0};
-    static final int[] DX = {0, 0, -1, 1};
+    // 위, 왼쪽, 오른쪽, 아래 (행/열 우선 조건 보장)
+    static final int[] DY = {-1, 0, 0, 1};
+    static final int[] DX = {0, -1, 1, 0};
+
     static int N, M, F;
     static int[][] map;
-    static List<Guest> guests = new ArrayList<>();
-    static boolean[][] visited;
-    static int[][] guestIdx; // 손님이 있으면 인덱스, 없으면 -1
+    static Guest[] guests;
+    static int[][] guestIdx; // 손님 있으면 index, 없으면 -1
 
-    static int getDist(int sy, int sx, int dy, int dx) {
+    // 택시 위치에서 가장 먼저 만나는 손님 찾기
+    static int findGuest(int ty, int tx) {
         Queue<int[]> q = new ArrayDeque<>();
-        q.offer(new int[] {sy, sx, 0});
-        visited = new boolean[N][N];
+        boolean[][] visited = new boolean[N][N];
+    
+        q.offer(new int[]{ty, tx});
+        visited[ty][tx] = true;
+    
+        int dist = 0;
+    
+        while (!q.isEmpty()) {
+            int size = q.size();
+            int selIdx = -1;
+            int minY = Integer.MAX_VALUE;
+            int minX = Integer.MAX_VALUE;
+    
+            // 같은 거리 레벨만 처리
+            for (int s = 0; s < size; s++) {
+                int[] cur = q.poll();
+                int y = cur[0], x = cur[1];
+    
+                if (guestIdx[y][x] != -1) {
+                    if (y < minY || (y == minY && x < minX)) {
+                        minY = y;
+                        minX = x;
+                        selIdx = guestIdx[y][x];
+                    }
+                }
+    
+                for (int d = 0; d < 4; d++) {
+                    int ny = y + DY[d];
+                    int nx = x + DX[d];
+                    if (ny < 0 || nx < 0 || ny >= N || nx >= N) continue;
+                    if (map[ny][nx] == 1 || visited[ny][nx]) continue;
+                    visited[ny][nx] = true;
+                    q.offer(new int[]{ny, nx});
+                }
+            }
+    
+            // 이 거리에서 손님을 찾았으면 종료
+            if (selIdx != -1) {
+                if (F < dist) return -1;
+                F -= dist;
+                return selIdx;
+            }
+    
+            dist++;
+        }
+    
+        return -1;
+    }
+
+    // 출발 → 도착 BFS
+    static int move(int sy, int sx, int dy, int dx) {
+        Queue<int[]> q = new ArrayDeque<>();
+        boolean[][] visited = new boolean[N][N];
+
+        q.offer(new int[]{sy, sx, 0});
         visited[sy][sx] = true;
 
         while (!q.isEmpty()) {
             int[] cur = q.poll();
-            int y = cur[0];
-            int x = cur[1];
-            int dist = cur[2];
+            int y = cur[0], x = cur[1], dist = cur[2];
 
             if (y == dy && x == dx) return dist;
-            
+
             for (int d = 0; d < 4; d++) {
                 int ny = y + DY[d];
                 int nx = x + DX[d];
-
-                if (ny < 0 || ny >= N || nx < 0 || nx >= N ||
-                    map[ny][nx] == 1 || visited[ny][nx]) continue;
-
+                if (ny < 0 || nx < 0 || ny >= N || nx >= N) continue;
+                if (map[ny][nx] == 1 || visited[ny][nx]) continue;
                 visited[ny][nx] = true;
-                q.offer(new int[] {ny, nx, dist + 1});
+                q.offer(new int[]{ny, nx, dist + 1});
             }
         }
-        
         return -1;
     }
 
-    static int updateDist(int ty, int tx) {
-        Queue<int[]> q = new ArrayDeque<>();
-        q.offer(new int[] {ty, tx, 0});
-        visited = new boolean[N][N];
-        visited[ty][tx] = true;
-        int cnt = guests.size();
-        
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
-            int y = cur[0];
-            int x = cur[1];
-            int dist = cur[2];
-
-            if (guestIdx[y][x] != -1) {
-                guests.get(guestIdx[y][x]).dist = dist;
-                cnt--;
-            }
-
-            if (cnt == 0) break;
-            
-            for (int d = 0; d < 4; d++) {
-                int ny = y + DY[d];
-                int nx = x + DX[d];
-
-                if (ny < 0 || ny >= N || nx < 0 || nx >= N ||
-                    map[ny][nx] == 1 || visited[ny][nx]) continue;
-
-                visited[ny][nx] = true;
-                q.offer(new int[] {ny, nx, dist + 1});
-            }
-        }
-
-        return cnt;
-    }
-    
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -103,60 +108,50 @@ class Main {
 
         map = new int[N][N];
         guestIdx = new int[N][N];
-
         for (int i = 0; i < N; i++) {
+            Arrays.fill(guestIdx[i], -1);
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
-            Arrays.fill(guestIdx[i], -1);
         }
 
         st = new StringTokenizer(br.readLine());
         int ty = Integer.parseInt(st.nextToken()) - 1;
         int tx = Integer.parseInt(st.nextToken()) - 1;
-        
-        for (int i = 2; i < M + 2; i++) {
+
+        guests = new Guest[M];
+        for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int sy = Integer.parseInt(st.nextToken()) - 1;
             int sx = Integer.parseInt(st.nextToken()) - 1;
             int dy = Integer.parseInt(st.nextToken()) - 1;
             int dx = Integer.parseInt(st.nextToken()) - 1;
-            guests.add(new Guest(sy, sx, dy, dx, 0));
+            guests[i] = new Guest(sy, sx, dy, dx);
+            guestIdx[sy][sx] = i;
         }
 
-        // 손님 태우기
-        while (!guests.isEmpty()) {
-            for (int i = 0; i < guests.size(); i++) {
-                Guest g = guests.get(i);
-                guestIdx[g.sy][g.sx] = i;
-            }
-            
-            if (updateDist(ty, tx) > 0) {
-                F = -1;
-                break;
-            };
-            
-            Collections.sort(guests);
-            
-            Guest guest = guests.get(0);
-            F -= guest.dist;
-            
-            int gdDist = getDist(guest.sy, guest.sx, guest.dy, guest.dx);
-
-            if (gdDist == -1 || F - gdDist < 0) {
-                F = -1;
-                break;
+        for (int i = 0; i < M; i++) {
+            int idx = findGuest(ty, tx);
+            if (idx == -1) {
+                System.out.println(-1);
+                return;
             }
 
-            F += gdDist;
-            ty = guest.dy;
-            tx = guest.dx;
+            Guest g = guests[idx];
+            guestIdx[g.sy][g.sx] = -1;
 
-            guestIdx[guest.sy][guest.sx] = -1;
-            guests.remove(0);
+            int d = move(g.sy, g.sx, g.dy, g.dx);
+            if (d == -1 || F < d) {
+                System.out.println(-1);
+                return;
+            }
+
+            F += d;
+            ty = g.dy;
+            tx = g.dx;
         }
-        
+
         System.out.println(F);
     }
 }
