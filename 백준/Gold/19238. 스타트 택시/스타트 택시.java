@@ -73,7 +73,6 @@ class Main {
 
             if (guestIdx[y][x] != -1) {
                 guests.get(guestIdx[y][x]).dist = dist;
-                guestIdx[y][x] = -1;
                 cnt--;
             }
 
@@ -154,6 +153,7 @@ class Main {
             ty = guest.dy;
             tx = guest.dx;
 
+            guestIdx[guest.sy][guest.sx] = -1;
             guests.remove(0);
         }
         
