@@ -27,6 +27,7 @@ class Main {
     static int[][] map;
     static List<Guest> guests = new ArrayList<>();
     static boolean[][] visited;
+    static int[][] guestIdx; // 손님이 있으면 인덱스, 없으면 -1
 
     static int getDist(int sy, int sx, int dy, int dx) {
         Queue<int[]> q = new ArrayDeque<>();
@@ -60,7 +61,7 @@ class Main {
     static int updateDist(int ty, int tx) {
         Queue<int[]> q = new ArrayDeque<>();
         q.offer(new int[] {ty, tx, 0});
-        boolean[][] visited = new boolean[N][N];
+        visited = new boolean[N][N];
         visited[ty][tx] = true;
         int cnt = guests.size();
         
@@ -70,11 +71,10 @@ class Main {
             int x = cur[1];
             int dist = cur[2];
 
-            for (Guest g : guests) {
-                if (g.sy == y && g.sx == x) {
-                    g.dist = dist;
-                    cnt--;
-                }
+            if (guestIdx[y][x] != -1) {
+                guests.get(guestIdx[y][x]).dist = dist;
+                guestIdx[y][x] = -1;
+                cnt--;
             }
 
             if (cnt == 0) break;
@@ -103,30 +103,36 @@ class Main {
         F = Integer.parseInt(st.nextToken());
 
         map = new int[N][N];
+        guestIdx = new int[N][N];
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
+            Arrays.fill(guestIdx[i], -1);
         }
 
         st = new StringTokenizer(br.readLine());
         int ty = Integer.parseInt(st.nextToken()) - 1;
         int tx = Integer.parseInt(st.nextToken()) - 1;
         
-        for (int i = 0; i < M; i++) {
+        for (int i = 2; i < M + 2; i++) {
             st = new StringTokenizer(br.readLine());
             int sy = Integer.parseInt(st.nextToken()) - 1;
             int sx = Integer.parseInt(st.nextToken()) - 1;
             int dy = Integer.parseInt(st.nextToken()) - 1;
             int dx = Integer.parseInt(st.nextToken()) - 1;
-
             guests.add(new Guest(sy, sx, dy, dx, 0));
         }
 
         // 손님 태우기
         while (!guests.isEmpty()) {
+            for (int i = 0; i < guests.size(); i++) {
+                Guest g = guests.get(i);
+                guestIdx[g.sy][g.sx] = i;
+            }
+            
             if (updateDist(ty, tx) > 0) {
                 F = -1;
                 break;
@@ -135,7 +141,6 @@ class Main {
             Collections.sort(guests);
             
             Guest guest = guests.get(0);
-            
             F -= guest.dist;
             
             int gdDist = getDist(guest.sy, guest.sx, guest.dy, guest.dx);
