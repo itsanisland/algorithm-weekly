@@ -26,11 +26,12 @@ class Main {
     static int N, M, F;
     static int[][] map;
     static List<Guest> guests = new ArrayList<>();
+    static boolean[][] visited;
 
     static int getDist(int sy, int sx, int dy, int dx) {
         Queue<int[]> q = new ArrayDeque<>();
         q.offer(new int[] {sy, sx, 0});
-        boolean[][] visited = new boolean[N][N];
+        visited = new boolean[N][N];
         visited[sy][sx] = true;
 
         while (!q.isEmpty()) {
