@@ -3,72 +3,53 @@ import java.io.*;
 
 class Main {
 
-    public static int N, L;
-    public static int[][] map;
+    static int N, L;
+    static int[][] board;
 
-    public static boolean checkR(int idx) {
+    static boolean check(int[] line) {
         boolean[] used = new boolean[N];
         for (int i = 0; i < N - 1; i++) {
-            if (map[i][idx] == map[i + 1][idx]) continue;
-            else if (map[i][idx] - map[i + 1][idx] == 1) {
+            if (line[i] == line[i + 1]) continue;
+            else if (line[i] - line[i + 1] == 1) { // 내려가는 경사 (\)
                 for (int j = i + 1; j <= i + L; j++) {
-                    if (j >= N || map[i + 1][idx] != map[j][idx] || used[j]) return false;
+                    if (j >= N || used[j] || line[i + 1] != line[j]) return false;
                     used[j] = true;
                 }
-            } else if (map[i][idx] - map[i + 1][idx] == -1) {
+                i += L - 1;
+            } else if (line[i] - line[i + 1] == -1) { // 올라가는 경사 (/)
                 for (int j = i; j > i - L; j--) {
-                    if (j < 0 || map[i][idx] != map[j][idx] || used[j]) return false;
+                    if (j < 0 || used[j] || line[i] != line[j]) return false;
                     used[j] = true;
                 }
-            } else {
-                return false;
-            }
+            } else return false;
         }
         return true;
     }
 
-    public static boolean checkC(int idx) {
-        boolean[] used = new boolean[N];
-        for (int i = 0; i < N - 1; i++) {
-            if (map[idx][i] == map[idx][i + 1]) continue;
-            else if (map[idx][i] - map[idx][i + 1] == 1) {
-                for (int j = i + 1; j <= i + L; j++) {
-                    if (j >= N || map[idx][i + 1] != map[idx][j] || used[j]) return false;
-                    used[j] = true;
-                }
-            } else if (map[idx][i] - map[idx][i + 1] == -1) {
-                for (int j = i; j > i - L; j--) {
-                    if (j < 0 || map[idx][i] != map[idx][j] || used[j]) return false;
-                    used[j] = true;
-                }
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        
+
         N = Integer.parseInt(st.nextToken());
         L = Integer.parseInt(st.nextToken());
-        map = new int[N][N];
-        
+
+        board = new int[N][N];
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
+                board[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-
-        int cnt = 0;
+        
+        int ans = 0;
         for (int i = 0; i < N; i++) {
-            if (checkR(i)) cnt++;
-            if (checkC(i)) cnt++;
+            if (check(board[i])) ans++;
+            
+            int[] cLine = new int[N];
+            for (int j = 0; j < N; j++) cLine[j] = board[j][i];
+            if(check(cLine)) ans++;
         }
-
-        System.out.println(cnt);
+        System.out.println(ans);
     }
 }
