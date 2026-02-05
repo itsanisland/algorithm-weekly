@@ -1,59 +1,56 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Main {
-    public static void main(String[] args) throws IOException {
+public class Main {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        int[] A = new int[N * 2];
-        boolean[] robots = new boolean[N];
+
+        int[] A = new int[2 * N];
+        boolean[] robot = new boolean[N];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N * 2; i++) {
+        for (int i = 0; i < 2 * N; i++) {
             A[i] = Integer.parseInt(st.nextToken());
         }
 
-        boolean finished = false;
         int step = 0;
+        int zeroCnt = 0;
 
-        while (!finished) {
+        while (zeroCnt < K) {
             step++;
-            
-            // 컨테이너 벨트 회전
-            int lastA = A[N * 2 - 1];
-            System.arraycopy(A, 0, A, 1, N * 2 - 1);
-            A[0] = lastA;
 
-            // 로봇 회전
-            System.arraycopy(robots, 0, robots, 1, N - 1);
-            robots[0] = false;
-            robots[N - 1] = false;
+            // 1. 벨트 회전
+            int last = A[2 * N - 1];
+            System.arraycopy(A, 0, A, 1, 2 * N - 1);
+            A[0] = last;
 
+            System.arraycopy(robot, 0, robot, 1, N - 1);
+            robot[0] = false;
+            robot[N - 1] = false;
+
+            // 2. 로봇 이동
             for (int i = N - 2; i >= 0; i--) {
-                if (robots[i] && !robots[i + 1] && A[i + 1] > 0) {
-                    robots[i] = false;
-                    robots[i + 1] = true;
+                if (robot[i] && !robot[i + 1] && A[i + 1] > 0) {
+                    robot[i] = false;
+                    robot[i + 1] = true;
                     A[i + 1]--;
+                    if (A[i + 1] == 0) zeroCnt++;
                 }
             }
+            robot[N - 1] = false;
 
-            // 로봇 올리기
-            if (A[0] > 0) {
-                robots[0] = true;
+            // 3. 로봇 올리기
+            if (A[0] > 0 && !robot[0]) {
+                robot[0] = true;
                 A[0]--;
+                if (A[0] == 0) zeroCnt++;
             }
-
-            int zeroCnt = 0;
-            for (int i = 0; i < N * 2; i++) {
-                if (A[i] == 0) zeroCnt++;
-            }
-
-            if (zeroCnt >= K) finished = true;
         }
-        
+
         System.out.println(step);
     }
 }
