@@ -39,7 +39,6 @@ class Main {
                     A[i + 1]--;
                 }
             }
-            robots[N - 1] = false;
 
             // 로봇 올리기
             if (A[0] > 0) {
