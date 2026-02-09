@@ -7,11 +7,11 @@ class Main {
     static final int[] DX = {0, 0, -1, 1};
 
     static int SIZE;
-    static int[][] A;
+    static int[][] A, tmp;
     
     // 시계 방향 90도 회전
     static void rotate(int y, int x, int size) {
-        int[][] tmp = new int[size][size];
+        tmp = new int[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 tmp[i][j] = A[y + size - j - 1][x + i];
