@@ -23,10 +23,6 @@ class Main {
             }
             return o.favCnt - favCnt;
         }
-
-        public String toString() {
-            return r + " " + c + " " + favCnt + " " + emptyCnt;
-        }
     }
 
     static final int[] DR = {-1, 1, 0, 0};
@@ -36,7 +32,7 @@ class Main {
     static int[][] board, fav;
 
     static void setPos(int std) {
-        List<Pos> candidates = new ArrayList<>();
+        Pos pos = new Pos(-1, -1, -1, -1);
 
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < N; c++) {
@@ -59,12 +55,11 @@ class Main {
                     }
                 }
 
-                candidates.add(new Pos(r, c, favCnt, emptyCnt));
+                Pos newPos = new Pos(r, c, favCnt, emptyCnt);
+                if (pos.compareTo(newPos) > 0) pos = newPos;
             }
         }
 
-        Collections.sort(candidates);
-        Pos pos = candidates.get(0);
         board[pos.r][pos.c] = std;
     }
 
@@ -106,6 +101,7 @@ class Main {
             StringTokenizer st = new StringTokenizer(br.readLine());
             
             int std = Integer.parseInt(st.nextToken());
+
             for (int j = 0; j < 4; j++) {
                 fav[std][j] = Integer.parseInt(st.nextToken()); 
             }
