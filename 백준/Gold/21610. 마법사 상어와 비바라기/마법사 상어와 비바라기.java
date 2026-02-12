@@ -20,8 +20,9 @@ class Main {
             for (int x = 0; x < N; x++) {
                 if (!cloud[y][x]) continue;
 
-                int ny = (y + DY[d] * (s % N) + N) % N;
-                int nx = (x + DX[d] * (s % N) + N) % N;
+                int move = s % N;
+                int ny = (y + DY[d] * move + N) % N;
+                int nx = (x + DX[d] * move + N) % N;
                 
                 movingCloud[ny][nx] = true;
                 water[ny][nx]++;
@@ -65,7 +66,6 @@ class Main {
         
         N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        
         water = new int[N][N];
 
         for (int i = 0; i < N; i++) {
