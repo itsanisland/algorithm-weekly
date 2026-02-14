@@ -1,5 +1,7 @@
-SELECT parent.ID, COUNT(child.ID) AS CHILD_COUNT
-FROM ECOLI_DATA parent LEFT JOIN ECOLI_DATA child
-ON parent.ID = child.PARENT_ID
-GROUP BY parent.ID
+SELECT parent.ID, (
+    SELECT COUNT(*)
+    FROM ECOLI_DATA
+    WHERE parent.ID = PARENT_ID
+) AS CHILD_COUNT
+FROM ECOLI_DATA parent
 ORDER BY parent.ID
