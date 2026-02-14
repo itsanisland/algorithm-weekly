@@ -9,6 +9,7 @@ class Main {
     static int N, M, ans;
     static int[][] map;
     static int[] dice = {0, 1, 2, 3, 4, 5, 6};
+    static int y, x, d;
 
     static void roll(int d) {
         int tmp;
@@ -73,9 +74,7 @@ class Main {
         return cnt;
     }
     
-    static int[] play(int[] yxd) {
-        int y = yxd[0], x = yxd[1], d = yxd[2];
-        
+    static void play() { 
         int ny = y + DY[d];
         int nx = x + DX[d];
 
@@ -96,7 +95,7 @@ class Main {
         if (A > B) d = (d + 1) % 4;
         else if (A < B) d = (d + 3) % 4;
 
-        return new int[] {ny, nx, d};
+        y = ny; x = nx;
     }
     
     public static void main(String[] args) throws IOException {
@@ -115,10 +114,8 @@ class Main {
             }
         }
         
-        int[] yxd = {0, 0, 0};
-        
         while (K-- > 0) {
-            yxd = play(yxd);
+            play();
         }
         
         System.out.println(ans);
