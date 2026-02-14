@@ -7,7 +7,7 @@ class Main {
     static final int[] DX = {1, 0, -1, 0};
 
     static int N, M, ans;
-    static int[][] map;
+    static int[][] map, cntMap;
     static int[] dice = {0, 1, 2, 3, 4, 5, 6};
     static int y, x, d;
 
@@ -45,33 +45,43 @@ class Main {
         }
     }
 
-    static int bfs(int y, int x, int b) {
-        Queue<int[]> q = new ArrayDeque<>();
-        q.offer(new int[] {y, x});
-
+    static void preprocess() {
         boolean[][] visited = new boolean[N][M];
-        visited[y][x] = true;
 
-        int cnt = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (visited[i][j]) continue;
+
+                visited[i][j] = true;
+                Queue<int[]> q = new ArrayDeque<>();
+                q.offer(new int[] {i, j});
+
+                List<int[]> cells = new ArrayList<>();
+                int cnt = 0;
         
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
-            y = cur[0];
-            x = cur[1];
-            cnt++;
+                while (!q.isEmpty()) {
+                    int[] cur = q.poll();
+                    int y = cur[0];
+                    int x = cur[1];
+                    cnt++;
+                    cells.add(new int[] {y, x});
+                    
+                    for (int d = 0; d < 4; d++) {
+                        int ny = y + DY[d];
+                        int nx = x + DX[d];
             
-            for (int d = 0; d < 4; d++) {
-                int ny = y + DY[d];
-                int nx = x + DX[d];
-    
-                if (ny < 0 || ny >= N || nx < 0 || nx >= M || map[ny][nx] != b || visited[ny][nx]) continue;
-    
-                visited[ny][nx] = true;
-                q.offer(new int[] {ny, nx});
+                        if (ny < 0 || ny >= N || nx < 0 || nx >= M || map[ny][nx] != map[y][x] || visited[ny][nx]) continue;
+            
+                        visited[ny][nx] = true;
+                        q.offer(new int[] {ny, nx});
+                    }
+                }
+
+                for (int[] yx : cells) {
+                    cntMap[yx[0]][yx[1]] = cnt;
+                }
             }
         }
-
-        return cnt;
     }
     
     static void play() { 
@@ -88,7 +98,7 @@ class Main {
 
         int A = dice[6];
         int B = map[ny][nx];
-        int C = bfs(ny, nx, B);
+        int C = cntMap[ny][nx];
 
         ans += B * C;
 
@@ -106,6 +116,7 @@ class Main {
         M = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
         map = new int[N][M];
+        cntMap = new int[N][M];
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
@@ -113,6 +124,8 @@ class Main {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+
+        preprocess();
         
         while (K-- > 0) {
             play();
