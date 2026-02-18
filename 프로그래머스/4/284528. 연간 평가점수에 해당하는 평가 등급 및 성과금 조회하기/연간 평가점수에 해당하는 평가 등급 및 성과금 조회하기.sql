@@ -1,10 +1,10 @@
 SELECT EMP_NO, EMP_NAME, GRADE, 
-(CASE
-    WHEN GRADE = 'S' THEN SAL * 0.2
-    WHEN GRADE = 'A' THEN SAL * 0.15
-    WHEN GRADE = 'B' THEN SAL * 0.1
-    ELSE 0
-END) AS BONUS
+    SAL * (CASE
+        WHEN GRADE = 'S' THEN 0.2
+        WHEN GRADE = 'A' THEN 0.15
+        WHEN GRADE = 'B' THEN 0.1
+        ELSE 0
+    END) AS BONUS
 FROM (
     SELECT EMP_NO, EMP_NAME, SAL,
         (CASE
