@@ -1,44 +1,29 @@
-import java.util.*;
-
 class Solution {
-    public int solution(int[][] info, int n, int m) {
-        final int INF = Integer.MAX_VALUE;
+    
+    int N, M, ans = 120;
+    int[][] infos;
+    boolean[][][] visited;
+    
+    public void dfs(int cnt, int size, int a, int b) {
+        if (a >= N || b >= M || a >= ans) return;
+        if (visited[cnt][a][b]) return;
         
-        int[] dp = new int[m];
-        Arrays.fill(dp, INF);
-        dp[0] = 0;
-
-        for (int[] cur : info) {
-            int aInc = cur[0];
-            int bInc = cur[1];
-
-            int[] next = new int[m];
-            Arrays.fill(next, INF);
-
-            for (int b = 0; b < m; b++) {
-                if (dp[b] == INF) continue;
-
-                // A가 맡음
-                int newA = dp[b] + aInc;
-                if (newA < n) {
-                    next[b] = Math.min(next[b], newA);
-                }
-
-                // B가 맡음
-                int newB = b + bInc;
-                if (newB < m) {
-                    next[newB] = Math.min(next[newB], dp[b]);
-                }
-            }
-
-            dp = next;
+        visited[cnt][a][b] = true;
+        
+        if (cnt == size) {
+            ans = Math.min(ans, a);
+            return;
         }
 
-        int ans = INF;
-        for (int b = 0; b < m; b++) {
-            ans = Math.min(ans, dp[b]);
-        }
-
-        return ans == INF ? -1 : ans;
+        dfs(cnt + 1, size, a + infos[cnt][0], b);
+        dfs(cnt + 1, size, a, b + infos[cnt][1]);
+    }
+    
+    public int solution(int[][] info, int n, int m) {
+        infos = info; N = n; M = m;
+        int cnt = info.length;
+        visited = new boolean[info.length + 1][n][m];
+        dfs(0, cnt, 0, 0);
+        return ans == 120 ? - 1 : ans;
     }
 }
