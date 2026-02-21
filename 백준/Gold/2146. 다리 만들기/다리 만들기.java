@@ -61,12 +61,9 @@ class Main {
                 int ny = y + DY[d];
                 int nx = x + DX[d];
 
-                if (ny < 0 || ny >= N || nx < 0 || nx >= N) continue;
-                if (v[ny][nx]) continue;
+                if (ny < 0 || ny >= N || nx < 0 || nx >= N || v[ny][nx]) continue;
 
-                if (map[ny][nx] > 0 && map[ny][nx] != num) {
-                    return dist;
-                }
+                if (map[ny][nx] > 0 && map[ny][nx] != num) return dist;
 
                 if (map[ny][nx] == 0) {
                     v[ny][nx] = true;
