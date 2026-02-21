@@ -9,6 +9,7 @@ class Main {
     static int N;
     static int[][] map;
     static boolean[][] visited;
+    static int ans = Integer.MAX_VALUE;
 
     static void label(int y, int x, int num) {
         Queue<int[]> q = new ArrayDeque<>();
@@ -54,6 +55,8 @@ class Main {
             int x = cur[1];
             int dist = cur[2];
 
+            if (dist >= ans) break;
+
             for (int d = 0; d < 4; d++) {
                 int ny = y + DY[d];
                 int nx = x + DX[d];
@@ -98,8 +101,6 @@ class Main {
                 }
             }
         }
-
-        int ans = Integer.MAX_VALUE;
 
         for (int i = 1; i < num; i++) {
             ans = Math.min(ans, bfs(i));
