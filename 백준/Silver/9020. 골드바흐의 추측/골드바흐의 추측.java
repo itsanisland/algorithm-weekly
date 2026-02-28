@@ -21,12 +21,8 @@ class Main {
             int n = Integer.parseInt(br.readLine());
             int a = 1, b = n;
 
-            // 1 2 4 8
-            // 8 = 3 + 5
-            
-            for (int i = 2; i <= n; i++) {
-                if (eratos[i] || eratos[n - i]) continue;
-                
+            for (int i = 2; i <= n / 2; i++) {
+                if (eratos[i] || eratos[n - i]) continue;                
                 if (Math.abs(i - (n - i)) < Math.abs(a - b)) {
                     a = i; b = n - i;
                 }
