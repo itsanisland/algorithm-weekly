@@ -19,16 +19,12 @@ class Main {
 
         while (T-- > 0) {
             int n = Integer.parseInt(br.readLine());
-            int a = 1, b = n;
 
-            for (int i = 2; i <= n / 2; i++) {
+            for (int i = n / 2; i >= 2; i--) { // 가운데부터 시작
                 if (eratos[i] || eratos[n - i]) continue;                
-                if (Math.abs(i - (n - i)) < Math.abs(a - b)) {
-                    a = i; b = n - i;
-                }
+                sb.append(i + " " + (n - i)).append("\n");
+                break;
             }
-            
-            sb.append(Math.min(a, b) + " " + Math.max(a, b)).append("\n");
         }
 
         System.out.println(sb);
