@@ -14,32 +14,31 @@ class Main {
     static int N, M;
     static int[][] board;
 
-    static void rotate() {
-        Pair start = new Pair(0, 0);
-        Pair end = new Pair(N - 1, M - 1);
-        
-        while (start.x < end.x && start.y < end.y) {
-            int temp = board[start.y][start.x];
-            
-            for (int i = start.x; i < end.x; i++) board[start.y][i] = board[start.y][i + 1];
-            for (int i = start.y; i < end.y; i++) board[i][end.x] = board[i + 1][end.x];
-            for (int i = end.x; i > start.x; i--) board[end.y][i] = board[end.y][i - 1];
-            for (int i = end.y; i > start.y; i--) board[i][start.x] = board[i - 1][start.x];
+    static List<Integer> getBorder(int ith) {
+        List<Integer> line = new ArrayList<>();
+        for (int x = ith; x < M - ith - 1; x++) line.add(board[ith][x]);
+        for (int y = ith; y < N - ith - 1; y++) line.add(board[y][M - ith - 1]);
+        for (int x = M - ith - 1; x > ith; x--) line.add(board[N - ith - 1][x]);
+        for (int y = N - ith - 1; y > ith; y--) line.add(board[y][ith]);
+        return line;
+    }
 
-            board[start.y + 1][start.x] = temp;
-            
-            start.x++; start.y++;
-            end.x--; end.y--;
-        }
+    static void restore(List<Integer> line, int ith) {
+        int i = 0;
+        for (int x = ith; x < M - ith - 1; x++) board[ith][x] = line.get(i++);
+        for (int y = ith; y < N - ith - 1; y++) board[y][M - ith - 1] = line.get(i++);
+        for (int x = M - ith - 1; x > ith; x--) board[N - ith - 1][x] = line.get(i++);
+        for (int y = N - ith - 1; y > ith; y--) board[y][ith] = line.get(i++);
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
         
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
+        int R = Integer.parseInt(st.nextToken());
 
         board = new int[N][M];
         
@@ -49,16 +48,30 @@ class Main {
                 board[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        
-        while (K-- > 0) {
-            rotate();
+
+        int lineCnt = Math.min(N, M) / 2;
+        for (int i = 0; i < lineCnt; i++) {
+            // 테두리 추출
+            List<Integer> line = getBorder(i);
+
+            // 실제 회전 횟수 계산
+            int rotateCnt = R % line.size();
+
+            // 회전
+            Collections.rotate(line, -rotateCnt); // 반시계 방향
+
+            // 복원
+            restore(line, i);
         }
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                System.out.print(board[i][j] + " ");
+                bw.write(board[i][j] + " ");
             }
-            System.out.println();
-        }       
+            bw.newLine();
+        }
+
+        bw.flush();
+        bw.close();
     }
 }
