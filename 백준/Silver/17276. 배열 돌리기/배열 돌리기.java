@@ -3,32 +3,41 @@ import java.io.*;
 
 class Main {
 
+    static List<Integer> getBorder(int[][] board, int n, int ith) {
+        List<Integer> ret = new ArrayList<>();
+
+        int d = n / 2 - ith;
+
+        for (int x = ith; x < n - ith - 1; x += d) ret.add(board[ith][x]);
+        for (int y = ith; y < n - ith - 1; y += d) ret.add(board[y][n - ith - 1]);
+        for (int x = n - ith - 1; x > ith; x -= d) ret.add(board[n - ith - 1][x]);
+        for (int y = n - ith - 1; y > ith; y -= d) ret.add(board[y][ith]);
+        
+        return ret;
+    }
+
+    static void restore(int[][] board, List<Integer> line, int n, int ith) {
+        int d = n / 2 - ith;
+        int i = 0;
+
+        for (int x = ith; x < n - ith - 1; x += d) board[ith][x] = line.get(i++);
+        for (int y = ith; y < n - ith - 1; y += d) board[y][n - ith - 1] = line.get(i++);
+        for (int x = n - ith - 1; x > ith; x -= d) board[n - ith - 1][x] = line.get(i++);
+        for (int y = n - ith - 1; y > ith; y -= d) board[y][ith] = line.get(i++);
+    }
+
     static int[][] rotate(int[][] board, int n, int d) {
         // 1. d를 시계방향 양수 값으로 보정 (예: -45 -> 315)
         if (d < 0) d += 360;
         int rotateCnt = d / 45;
-        int mid = (n - 1) / 2;
+        int lineCnt = n / 2;
     
-        while (rotateCnt-- > 0) {
-            int[][] nextBoard = new int[n][n];
-            
-            // 일단 전체 복사 (회전하지 않는 칸들을 위해)
-            for (int i = 0; i < n; i++) {
-                nextBoard[i] = board[i].clone();
-            }
-    
-            for (int i = 0; i < n; i++) {
-                // 주 대각선 -> 가운데 열
-                nextBoard[i][mid] = board[i][i];
-                // 가운데 열 -> 부 대각선
-                nextBoard[i][n - 1 - i] = board[i][mid];
-                // 부 대각선 -> 가운데 행
-                nextBoard[mid][n - 1 - i] = board[i][n - 1 - i];
-                // 가운데 행 -> 주 대각선
-                nextBoard[i][i] = board[mid][i];
-            }
-            // 다음 회전을 위해 원본 갱신
-            board = nextBoard;
+        for (int i = 0; i < lineCnt; i++) {
+            List<Integer> line = getBorder(board, n, i);
+
+            Collections.rotate(line, rotateCnt);
+
+            restore(board, line, n, i);
         }
         
         return board;
