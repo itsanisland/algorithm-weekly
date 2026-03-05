@@ -7,13 +7,14 @@ class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        double H = Double.parseDouble(st.nextToken());
-        double W = Double.parseDouble(st.nextToken());
-        double N = Double.parseDouble(st.nextToken()) + 1;
-        double M = Double.parseDouble(st.nextToken()) + 1;
+        int H = Integer.parseInt(st.nextToken());
+        int W = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
-        int ans = (int) Math.ceil(H / N) * (int) Math.ceil(W / M);
+        int cntR = (H - 1) / (N + 1) + 1;
+        int cntC = (W - 1) / (M + 1) + 1;
         
-        System.out.println(ans);
+        System.out.println(cntR * cntC);
     }
 }
