@@ -17,26 +17,11 @@ class Main {
             i++;
             bw.append("1");
         }
-        
-        if (i >= N) {
-            while (!channels[i].equals(channel)) {
-                i--;
-                bw.append("2");
-            }
-        }
 
-        if (i < dest) {
-            while (i != dest) {
-                swap(i, i + 1);
-                i++;
-                bw.append("3");
-            }
-        } else {
-            while (i != dest) {
-                swap(i, i - 1);
-                i--;
-                bw.append("4");
-            }
+        while (i != dest) {
+            swap(i, i - 1);
+            i--;
+            bw.append("4");
         }
     }
     
