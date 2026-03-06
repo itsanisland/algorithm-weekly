@@ -5,7 +5,7 @@ class Main {
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
         
         int M = Integer.parseInt(br.readLine());
         int[] S = new int[21];
@@ -24,8 +24,7 @@ class Main {
                     S[num] = 0;
                     break;
                 case "check":
-                    bw.append("" + S[num]);
-                    bw.newLine();
+                    sb.append(S[num]).append("\n");
                     break;
                 case "toggle":
                     S[num] = S[num] == 0 ? 1 : 0;
@@ -39,7 +38,6 @@ class Main {
             }
         }
         
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
     }
 }
