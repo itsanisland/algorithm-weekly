@@ -1,7 +1,7 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-public class Main {
+class Main {
 
     static char[][] U = new char[3][3];
     static char[][] D = new char[3][3];
@@ -10,66 +10,33 @@ public class Main {
     static char[][] L = new char[3][3];
     static char[][] R = new char[3][3];
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
-
-        while (T-- > 0) {
-            init();
-            int n = Integer.parseInt(br.readLine());
-            String[] cmd = br.readLine().split(" ");
-
-            for (String c : cmd) {
-                rotate(c.charAt(0), c.charAt(1));
-            }
-
-            // U 출력
-            for (int i = 0; i < 3; i++) {
-                System.out.println(new String(U[i]));
+    static void init() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                U[i][j] = 'w';
+                D[i][j] = 'y';
+                F[i][j] = 'r';
+                B[i][j] = 'o';
+                L[i][j] = 'g';
+                R[i][j] = 'b';
             }
         }
     }
 
-    static void init() {
-        fill(U, 'w');
-        fill(D, 'y');
-        fill(F, 'r');
-        fill(B, 'o');
-        fill(L, 'g');
-        fill(R, 'b');
-    }
+    static void rotateFace(char[][] face, char d) {
+        char[][] cp = new char[3][3];
+        for (int i = 0; i < 3; i++) cp[i] = face[i].clone();
 
-    static void fill(char[][] a, char c) {
-        for (int i = 0; i < 3; i++)
-            Arrays.fill(a[i], c);
-    }
-
-    static void rotate(char face, char dir) {
-        if (face == 'U') rotateU(dir);
-        else if (face == 'D') rotateD(dir);
-        else if (face == 'F') rotateF(dir);
-        else if (face == 'B') rotateB(dir);
-        else if (face == 'L') rotateL(dir);
-        else if (face == 'R') rotateR(dir);
-    }
-
-    static void rotateFace(char[][] a, boolean cw) {
-        char[][] t = new char[3][3];
-        for (int i = 0; i < 3; i++) t[i] = a[i].clone();
-
-        if (cw) {
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    a[j][2 - i] = t[i][j];
-        } else {
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    a[2 - j][i] = t[i][j];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (d == '+') face[j][2 - i] = cp[i][j];
+                else face[2 - j][i] = cp[i][j];
+            }
         }
     }
 
     static void rotateU(char d) {
-        rotateFace(U, d == '+');
+        rotateFace(U, d);
         for (int i = 0; i < 3; i++) {
             char t = F[0][i];
             if (d == '+') {
@@ -87,7 +54,7 @@ public class Main {
     }
 
     static void rotateD(char d) {
-        rotateFace(D, d == '+');
+        rotateFace(D, d);
         for (int i = 0; i < 3; i++) {
             char t = F[2][i];
             if (d == '+') {
@@ -105,43 +72,43 @@ public class Main {
     }
 
     static void rotateF(char d) {
-        rotateFace(F, d == '+');
+        rotateFace(F, d);
         for (int i = 0; i < 3; i++) {
-            char t = U[2][i];
+            char t = L[i][2];
             if (d == '+') {
-                U[2][i] = L[2 - i][2];
-                L[2 - i][2] = D[0][2 - i];
-                D[0][2 - i] = R[i][0];
-                R[i][0] = t;
+                L[i][2] = D[0][i];
+                D[0][i] = R[2 - i][0];
+                R[2 - i][0] = U[2][2 - i];
+                U[2][2 - i] = t;
             } else {
-                U[2][i] = R[i][0];
-                R[i][0] = D[0][2 - i];
-                D[0][2 - i] = L[2 - i][2];
-                L[2 - i][2] = t;
+                L[i][2] = U[2][2 - i];
+                U[2][2 - i] = R[2 - i][0];
+                R[2 - i][0] = D[0][i];
+                D[0][i] = t;
             }
         }
     }
 
     static void rotateB(char d) {
-        rotateFace(B, d == '+');
+        rotateFace(B, d);
         for (int i = 0; i < 3; i++) {
-            char t = U[0][i];
+            char t = L[i][0];
             if (d == '+') {
-                U[0][i] = R[i][2];
-                R[i][2] = D[2][2 - i];
-                D[2][2 - i] = L[2 - i][0];
-                L[2 - i][0] = t;
+                L[i][0] = U[0][2 - i];
+                U[0][2 - i] = R[2 - i][2];
+                R[2 - i][2] = D[2][i];
+                D[2][i] = t;
             } else {
-                U[0][i] = L[2 - i][0];
-                L[2 - i][0] = D[2][2 - i];
-                D[2][2 - i] = R[i][2];
-                R[i][2] = t;
+                L[i][0] = D[2][i];
+                D[2][i] = R[2 - i][2];
+                R[2 - i][2] = U[0][2 - i];
+                U[0][2 - i] = t;
             }
         }
     }
 
     static void rotateL(char d) {
-        rotateFace(L, d == '+');
+        rotateFace(L, d);
         for (int i = 0; i < 3; i++) {
             char t = U[i][0];
             if (d == '+') {
@@ -159,7 +126,7 @@ public class Main {
     }
 
     static void rotateR(char d) {
-        rotateFace(R, d == '+');
+        rotateFace(R, d);
         for (int i = 0; i < 3; i++) {
             char t = U[i][2];
             if (d == '+') {
@@ -174,5 +141,49 @@ public class Main {
                 F[i][2] = t;
             }
         }
+    }
+
+    static void rotate(char face, char d) {
+        if (face == 'U') rotateU(d);
+        if (face == 'D') rotateD(d);
+        if (face == 'F') rotateF(d);
+        if (face == 'B') rotateB(d);
+        if (face == 'L') rotateL(d);
+        if (face == 'R') rotateR(d);
+    }
+
+    static void print(BufferedWriter bw) throws IOException {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                bw.append(U[i][j]);
+            }
+            bw.newLine();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        
+        int T = Integer.parseInt(br.readLine());
+
+        while (T-- > 0) {
+            init();
+            
+            int n = Integer.parseInt(br.readLine());
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            
+            while (n-- > 0) {
+                String s = st.nextToken();
+                char face = s.charAt(0);
+                char d = s.charAt(1);
+                rotate(face, d);
+            }
+
+            print(bw);
+        }
+
+        bw.flush();
+        bw.close();
     }
 }
