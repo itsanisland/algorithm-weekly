@@ -1,4 +1,4 @@
-import java.util.*;
+ import java.util.*;
 import java.io.*;
 
 class Main {
@@ -38,17 +38,17 @@ class Main {
     static void rotateU(char d) {
         rotateFace(U, d);
         for (int i = 0; i < 3; i++) {
-            char t = F[0][i];
+            char t = L[0][i];
             if (d == '+') {
+                L[0][i] = F[0][i];
                 F[0][i] = R[0][i];
                 R[0][i] = B[0][i];
-                B[0][i] = L[0][i];
-                L[0][i] = t;
+                B[0][i] = t;
             } else {
-                F[0][i] = L[0][i];
                 L[0][i] = B[0][i];
                 B[0][i] = R[0][i];
-                R[0][i] = t;
+                R[0][i] = F[0][i];
+                F[0][i] = t;
             }
         }
     }
@@ -56,17 +56,17 @@ class Main {
     static void rotateD(char d) {
         rotateFace(D, d);
         for (int i = 0; i < 3; i++) {
-            char t = F[2][i];
+            char t = L[2][i];
             if (d == '+') {
-                F[2][i] = L[2][i];
                 L[2][i] = B[2][i];
                 B[2][i] = R[2][i];
-                R[2][i] = t;
+                R[2][i] = F[2][i];
+                F[2][i] = t;
             } else {
+                L[2][i] = F[2][i];
                 F[2][i] = R[2][i];
                 R[2][i] = B[2][i];
-                B[2][i] = L[2][i];
-                L[2][i] = t;
+                B[2][i] = t;
             }
         }
     }
