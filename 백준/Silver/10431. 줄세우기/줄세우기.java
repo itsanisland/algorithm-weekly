@@ -13,21 +13,12 @@ class Main {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int T = Integer.parseInt(st.nextToken());
             int cnt = 0;
-            Deque<Integer> front = new ArrayDeque<>();
-            Deque<Integer> back = new ArrayDeque<>();
-            
+            int[] arr = new int[20];
+
             for (int i = 0; i < 20; i++) {
-                int h = Integer.parseInt(st.nextToken());
-
-                if (front.isEmpty() || front.peekLast() < h) {
-                    front.offerLast(h);
-                } else {
-                    while (!front.isEmpty() && front.peekLast() > h) back.offerFirst(front.pollLast());
-
-                    cnt += back.size();
-                    front.offerLast(h);
-
-                    while (!back.isEmpty()) front.offerLast(back.pollFirst());
+                arr[i] = Integer.parseInt(st.nextToken());
+                for (int j = i; j >= 0; j--) {
+                    if (arr[i] < arr[j]) cnt++;
                 }
             }
 
