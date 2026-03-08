@@ -44,6 +44,11 @@ class Main {
         int rank = 1;
         int cnt = 1;
         for (int i = 1; i < N; i++) {
+            if (countries[i - 1].idx == K) {
+                System.out.println(rank);
+                break;
+            }
+            
             if (countries[i - 1].gold == countries[i].gold && 
                countries[i - 1].silver == countries[i].silver &&
                countries[i - 1].bronze == countries[i].bronze) {
@@ -51,11 +56,6 @@ class Main {
             } else {
                 rank += cnt;
                 cnt = 1;
-            }
-            
-            if (countries[i].idx == K) {
-                System.out.println(rank);
-                break;
             }
         }
     }
