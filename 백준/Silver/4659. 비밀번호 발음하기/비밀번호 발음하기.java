@@ -11,36 +11,35 @@ class Main {
         String s = br.readLine();
 
         while (!s.equals("end")) {
-            boolean step1 = false, step2 = true, step3 = true;
+            boolean ck = false;
 
-            // bouchtuh
-            String m = "";
-            String j = "";
+            int cnt1 = 0;
+            int cnt2 = 0;
             for (int i = 0; i < s.length(); i++) {
                 char ch = s.charAt(i);
                 
                 if (AEIOU.contains("" + ch)) { // 모음
-                    step1 = true;
-                    m += ch;
-                    j = "";
+                    ck = true;
+                    cnt1++;
+                    cnt2 = 0;
                 } else { // 자음
-                    j += ch;
-                    m = "";
+                    cnt2++;
+                    cnt1 = 0;
                 }
 
-                if (m.length() == 3 || j.length() == 3) {
-                    step2 = false;
+                if (cnt1 == 3 || cnt2 == 3) {
+                    ck = false;
                     break;
                 }
 
                 if (i > 0 && s.charAt(i - 1) == s.charAt(i)) {
                     if (s.charAt(i) == 'e' || s.charAt(i) == 'o') continue;
-                    step3 = false;
+                    ck = false;
                     break;
                 }
             }
             
-            System.out.println("<" + s + "> " + (step1 && step2 && step3 ? "is acceptable." : "is not acceptable."));
+            System.out.println("<" + s + "> " + (ck ? "is acceptable." : "is not acceptable."));
             s = br.readLine();
         }
     }
