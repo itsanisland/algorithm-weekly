@@ -21,11 +21,9 @@ class Main {
 
         while (N-- > 0) {
             String name = br.readLine();
-            if (set.contains(name)) continue;
             set.add(name);
-            ans++;
         }
         
-        System.out.println(ans / numsOfPlayers);
+        System.out.println(set.size() / numsOfPlayers);
     }
 }
