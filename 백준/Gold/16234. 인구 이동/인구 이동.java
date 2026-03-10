@@ -107,7 +107,7 @@ class Main {
             // 연합별 인구 이동
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                    if (visited[i][j]) continue;
+                    if (visited[i][j] && B[i][j] > 0) continue;
                     move(i, j);
                 }
             }
