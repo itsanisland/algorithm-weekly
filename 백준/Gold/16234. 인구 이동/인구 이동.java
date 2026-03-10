@@ -47,7 +47,6 @@ class Main {
         visited[y][x] = true;
 
         int sum = A[y][x];
-        int cnt = 1;
 
         while (!q.isEmpty()) {
             int[] cur = q.poll();
@@ -108,7 +107,7 @@ class Main {
             // 연합별 인구 이동
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                    if (visited[i][j] && B[i][j] > 0) continue;
+                    if (visited[i][j] && B[i][j] == 0) continue;
                     move(i, j);
                     isMoved = true;
                 }
