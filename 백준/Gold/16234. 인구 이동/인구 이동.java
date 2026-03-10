@@ -11,22 +11,30 @@ class Main {
     static int[][] B;
     static boolean[][] visited;
 
-    static boolean open(int y, int x) {
-        boolean isOpen = false;
-        for (int d = 0; d < 4; d++) {
-            int ny = y + DY[d];
-            int nx = x + DX[d];
+    static boolean openBorders() {
+        boolean anyOpen = false;
+        for (int y = 0; y < N; y++) {
+            for (int x = 0; x < N; x++) {
+                for (int d = 0; d < 4; d++) {
+                    int ny = y + DY[d];
+                    int nx = x + DX[d];
 
-            if (ny < 0 || ny == N || nx < 0 || nx == N || (B[y][x] & (1 << d)) > 0) continue;
+                    if (ny < 0 || ny >= N || nx < 0 || nx >= N || (B[y][x] & (1 << d)) > 0) continue;
 
-            int diff = Math.abs(A[y][x] - A[ny][nx]);
-
-            if (L <= diff && diff <= R) {
-                B[y][x] |= (1 << d);
-                isOpen = true;
+                    int diff = Math.abs(A[y][x] - A[ny][nx]);
+                    if (L <= diff && diff <= R) {
+                        // 내 쪽 국경 열기
+                        B[y][x] |= (1 << d);
+                        
+                        // 상대 쪽 국경도 열기 (정합성)
+                        // 0(상)^1=1(하), 2(좌)^1=3(우)
+                        B[ny][nx] |= (1 << (d ^ 1));
+                        anyOpen = true;
+                    }
+                }
             }
         }
-        return isOpen;
+        return anyOpen;
     }
 
     static void move(int y, int x) {
@@ -91,26 +99,22 @@ class Main {
         while (true) {
             B = new int[N][N]; // 각 나라의 국경선 open 여부(상하좌우 비트마스킹)
             visited = new boolean[N][N];
-            
-            // 국경선 열기
-            boolean isOpen = false;
-            
-            for (int i = 0; i < N; i++) {
-                for (int j = 0; j < N; j++) {
-                    boolean ck = open(i, j);
-                    if (ck) isOpen = true;
-                }
-            }
 
-            if (!isOpen) break;
+            // 국경선 열기
+            if (!openBorders()) break;
+
+            boolean isMoved = false;
     
             // 연합별 인구 이동
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
                     if (visited[i][j] && B[i][j] > 0) continue;
                     move(i, j);
+                    isMoved = true;
                 }
             }
+
+            if (!isMoved) break;
 
             ans++;
         }
