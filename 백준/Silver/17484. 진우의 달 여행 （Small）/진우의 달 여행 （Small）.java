@@ -9,6 +9,8 @@ class Main {
     static int[][] space;
     
     static void dfs(int y, int x, int dir, int depth, int sum) {
+        if (ans <= sum) return;
+        
         if (depth == N - 1) {
             ans = Math.min(ans, sum);
             return;
