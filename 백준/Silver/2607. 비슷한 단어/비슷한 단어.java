@@ -7,40 +7,50 @@ class Main {
         
         int N = Integer.parseInt(br.readLine());
         String firstWord = br.readLine();
-        int[] firstCount = getCount(firstWord);
+        char[] firstArr = firstWord.toCharArray();
+        Arrays.sort(firstArr);
         
         int ans = 0;
         for (int i = 1; i < N; i++) {
             String word = br.readLine();
-            int[] wordCount = getCount(word);
+            char[] arr = word.toCharArray();
+            Arrays.sort(arr);
             
-            int same = 0;
-            // 두 단어에서 공통으로 포함된 알파벳의 개수를 구함
-            for (int j = 0; j < 26; j++) {
-                same += Math.min(firstCount[j], wordCount[j]);
+            int diffLen = Math.abs(firstWord.length() - word.length());
+            if (diffLen > 1) continue;
+
+            int sameCnt = 0;
+            int p1 = 0, p2 = 0;
+
+            // 두 포인터로 공통 문자 개수 찾기
+            while (p1 < firstArr.length && p2 < arr.length) {
+                if (firstArr[p1] == arr[p2]) {
+                    sameCnt++;
+                    p1++;
+                    p2++;
+                } else if (firstArr[p1] < arr[p2]) {
+                    p1++;
+                } else {
+                    p2++;
+                }
             }
-            
-            // 비슷한 단어 조건 체크
-            if (firstWord.length() == word.length()) {
-                // 완전히 같거나, 한 글자만 바뀐 경우
-                if (same == firstWord.length() || same == firstWord.length() - 1) ans++;
-            } else if (firstWord.length() == word.length() + 1) {
-                // 첫 단어에서 한 글자를 뺀 경우 (비교 단어가 하나 짧음)
-                if (same == word.length()) ans++;
-            } else if (firstWord.length() == word.length() - 1) {
-                // 첫 단어에서 한 글자를 더한 경우 (비교 단어가 하나 김)
-                if (same == firstWord.length()) ans++;
+
+            // 비슷한 단어 판정 조건
+            int firstLen = firstArr.length;
+            int wordLen = arr.length;
+
+            if (firstLen == wordLen) {
+                // 1. 완전히 같음 (sameCnt == 길이)
+                // 2. 한 글자 교체 (sameCnt == 길이 - 1)
+                if (sameCnt >= firstLen - 1) ans++;
+            } else if (firstLen == wordLen + 1) {
+                // 3. 첫 단어에서 한 글자 삭제 (비교 단어가 하나 짧음)
+                if (sameCnt == wordLen) ans++;
+            } else if (firstLen == wordLen - 1) {
+                // 4. 첫 단어에서 한 글자 추가 (비교 단어가 하나 김)
+                if (sameCnt == firstLen) ans++;
             }
         }
         System.out.println(ans);
-    }
-
-    // 알파벳 빈도수를 세는 헬퍼 함수
-    static int[] getCount(String s) {
-        int[] count = new int[26];
-        for (char c : s.toCharArray()) {
-            count[c - 'A']++;
-        }
-        return count;
     }
 }
