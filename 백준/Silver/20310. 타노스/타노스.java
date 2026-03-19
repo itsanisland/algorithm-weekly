@@ -36,11 +36,11 @@ class Main {
             idx--;
         }
 
-        String ans = "";
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < len; i++) {
             if (deleted[i]) continue;
-            ans += s.charAt(i);
+            sb.append(s.charAt(i));
         }
-        System.out.println(ans);
+        System.out.println(sb);
     }
 }
