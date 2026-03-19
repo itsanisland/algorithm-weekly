@@ -6,6 +6,7 @@ class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String s = br.readLine();
+        StringBuilder sb = new StringBuilder(s);
         int cntZero = 0, cntOne = 0;
 
         for (char ch : s.toCharArray()) {
@@ -16,10 +17,23 @@ class Main {
         cntZero /= 2;
         cntOne /= 2;
 
-        String ans = "";
-        for (int i = 0; i < cntZero; i++) ans += '0';
-        for (int i = 0; i < cntOne; i++) ans += '1';
+        int idx = 0;
+        while (cntOne > 0) {
+            if (sb.charAt(idx) == '1') {
+                cntOne--;
+                sb.deleteCharAt(idx);
+            } else idx++;
+        }
+
+        idx = sb.length() - 1;
+        while (cntZero > 0) {
+            if (sb.charAt(idx) == '0') {
+                cntZero--;
+                sb.deleteCharAt(idx);
+            }
+            idx--;
+        }
         
-        System.out.println(ans);
+        System.out.println(sb);
     }
 }
