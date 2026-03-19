@@ -6,8 +6,9 @@ class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String s = br.readLine();
-        StringBuilder sb = new StringBuilder(s);
+        int len = s.length();
         int cntZero = 0, cntOne = 0;
+        boolean[] deleted = new boolean[len];
 
         for (char ch : s.toCharArray()) {
             if (ch == '0') cntZero++;
@@ -19,21 +20,27 @@ class Main {
 
         int idx = 0;
         while (cntOne > 0) {
-            if (sb.charAt(idx) == '1') {
+            if (s.charAt(idx) == '1') {
                 cntOne--;
-                sb.deleteCharAt(idx);
-            } else idx++;
+                deleted[idx] = true;
+            }
+            idx++;
         }
 
-        idx = sb.length() - 1;
+        idx = len - 1;
         while (cntZero > 0) {
-            if (sb.charAt(idx) == '0') {
+            if (s.charAt(idx) == '0') {
                 cntZero--;
-                sb.deleteCharAt(idx);
+                deleted[idx] = true;
             }
             idx--;
         }
-        
-        System.out.println(sb);
+
+        String ans = "";
+        for (int i = 0; i < len; i++) {
+            if (deleted[i]) continue;
+            ans += s.charAt(i);
+        }
+        System.out.println(ans);
     }
 }
