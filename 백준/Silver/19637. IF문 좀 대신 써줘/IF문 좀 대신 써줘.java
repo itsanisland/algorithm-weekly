@@ -32,7 +32,7 @@ class Main {
         for (int i = 0; i < M; i++) {
             int power = Integer.parseInt(br.readLine());
             
-            // Low-bound(하한선) 이분탐색
+            // Lower-Bound(하한선) 이분탐색
             int left = 0, right = N - 1;
             while (left <= right) {
                 int mid = (left + right) / 2;
