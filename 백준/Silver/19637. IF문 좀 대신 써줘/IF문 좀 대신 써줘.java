@@ -20,33 +20,26 @@ class Main {
         
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        Type[] types = new Type[N + 1];
-        types[0] = new Type("-", -1);
+        Type[] types = new Type[N];
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             String name = st.nextToken();
             int upper = Integer.parseInt(st.nextToken());
             types[i] = new Type(name, upper);
         }
 
-        Arrays.sort(types, (a, b) -> {
-            return a.upper - b.upper;
-        });
-
         for (int i = 0; i < M; i++) {
             int power = Integer.parseInt(br.readLine());
-            // 이분탐색
-            int low = 0, high = N;
-            while (low <= high) {
-                int mid = (low + high) / 2;
-                if (power <= types[mid].upper) {
-                    if (mid > 0 && types[mid - 1].upper < power) {
-                        sb.append(types[mid].name).append("\n");
-                        break;
-                    } else high = mid - 1;
-                } else low = mid + 1;
+            
+            // Low-bound(하한선) 이분탐색
+            int left = 0, right = N - 1;
+            while (left <= right) {
+                int mid = (left + right) / 2;
+                if (types[mid].upper < power) left = mid + 1;
+                else right = mid - 1;
             }
+            sb.append(types[left].name).append("\n");
         }
         
         System.out.println(sb);
