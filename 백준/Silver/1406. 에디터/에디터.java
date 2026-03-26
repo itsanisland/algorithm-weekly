@@ -2,48 +2,50 @@ import java.util.*;
 import java.io.*;
 
 class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String s = br.readLine();
         int M = Integer.parseInt(br.readLine());
 
-        Deque<Character> prev = new ArrayDeque<>();
-        Deque<Character> back = new ArrayDeque<>();
+        Deque<Character> left = new ArrayDeque<>();
+        Deque<Character> right = new ArrayDeque<>();
 
-        for (char ch : s.toCharArray()) prev.offer(ch);
+        for (int i = 0; i < s.length(); i++) {
+            left.offerLast(s.charAt(i));
+        }
 
         while (M-- > 0) {
-            String[] input = br.readLine().split(" ");
-            char cmd = input[0].charAt(0);
-            char x = input.length > 1 ? input[1].charAt(0) : ' ';
+            String input = br.readLine();
+            char cmd = input.charAt(0);
 
             switch (cmd) {
                 case 'L':
-                    if (prev.size() > 0) {
-                        back.offerFirst(prev.pollLast());
+                    if (!left.isEmpty()) {
+                        right.offerFirst(left.pollLast());
                     }
                     break;
                 case 'D':
-                    if (back.size() > 0) {
-                        prev.offerLast(back.pollFirst());
+                    if (!right.isEmpty()) {
+                        left.offerLast(right.pollFirst());
                     }
                     break;
                 case 'B':
-                    if (prev.size() > 0) {
-                        prev.pollLast();
+                    if (!left.isEmpty()) {
+                        left.pollLast();
                     }
                     break;
                 case 'P':
-                    prev.offerLast(x);
+                    left.offerLast(input.charAt(2));
                     break;
             }
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (char ch : prev) sb.append(ch);
-        for (char ch : back) sb.append(ch);
+        StringBuilder sb = new StringBuilder(left.size() + right.size());
+
+        for (char ch : left) sb.append(ch);
+        for (char ch : right) sb.append(ch);
+
         System.out.println(sb);
     }
 }
