@@ -34,12 +34,14 @@ class Main {
 
         bfs(sy, sx);
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                System.out.print((board[i][j] == 1 && result[i][j] == 0 ? -1 : result[i][j]) + " ");
+                sb.append(board[i][j] == 1 && result[i][j] == 0 ? -1 : result[i][j]).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        System.out.println(sb);
     }
 
     static void bfs(int sy, int sx) {
