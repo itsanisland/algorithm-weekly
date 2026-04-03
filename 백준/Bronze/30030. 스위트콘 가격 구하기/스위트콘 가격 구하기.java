@@ -7,6 +7,6 @@ class Main {
 
         int B = Integer.parseInt(br.readLine());
 
-        System.out.println((int) Math.round(B / 1.1));
+        System.out.println(B * 10 / 11);
     }
 }
