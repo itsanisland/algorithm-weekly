@@ -7,10 +7,8 @@ class Main {
 
         int x = Integer.parseInt(br.readLine());
 
-        String uso = "UOS";
+        String uso = "SUO";
 
-        int idx = x % 3 == 0 ? 2 : x % 3 - 1;
-        
-        System.out.println(uso.charAt(idx));
+        System.out.println(uso.charAt(x % 3));
     }
 }
