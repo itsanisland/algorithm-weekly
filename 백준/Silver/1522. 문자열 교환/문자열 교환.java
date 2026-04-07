@@ -19,13 +19,11 @@ class Main {
         }
 
         int b = bMin;
-        for (int l = 1; l < size; l++) {
-            char left = s.charAt(l);
-            if (s.charAt(l - 1) == 'b') b--;
+        for (int l = 0; l < size; l++) {
+            if (s.charAt(l) == 'b') b--; // 빠지는 것
 
-            int r = (l + a - 1) % size;
-            char right = s.charAt(r);
-            if (right == 'b') b++;
+            int r = (l + a) % size; // 들어오는 것
+            if (s.charAt(r) == 'b') b++;
             
             bMin = Math.min(bMin, b);
         }
