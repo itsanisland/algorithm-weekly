@@ -2,73 +2,67 @@ import java.util.*;
 
 class Solution {
     
-    final int INF = Integer.MAX_VALUE;
+    static final int INF = Integer.MAX_VALUE;
     
-    int[][] graph;
-    int[] dist;
-    boolean[][] visited;
-    
-    PriorityQueue<Node> pq;
-    
-    public int solution(int N, int[][] road, int K) {
-        graph = new int[N + 1][N + 1];
+    static class Road implements Comparable<Road> {
+        int node, dist;
         
-        for (int i = 0; i < road.length; i++) {
-            int v1 = road[i][0];
-            int v2 = road[i][1];
-            int w = road[i][2];
-
-            graph[v1][v2] = graph[v1][v2] == 0 ? w : Math.min(graph[v1][v2], w);
-            graph[v2][v1] = graph[v2][v1] == 0 ? w : Math.min(graph[v2][v1], w);
+        Road(int node, int dist) {
+            this.node = node;
+            this.dist = dist;
         }
         
-        dist = new int[N + 1];
-        Arrays.fill(dist, INF);
-        dist[1] = 0;
-        
-        visited = new boolean[N + 1][N + 1];
-        
-        pq = new PriorityQueue<>();
-        pq.offer(new Node(1, 0));
-        
-        dijkstra(N);
-        
-        int answer = 0;
-        for (int i = 1; i <= N; i++) {
-            if (dist[i] <= K) answer++;
+        public int compareTo(Road o) {
+            return this.dist - o.dist;
         }
-
-        return answer;
     }
     
-    private void dijkstra(int n) {
+    public int solution(int N, int[][] road, int K) {        
+        int[][] graph = new int[N + 1][N + 1];
+        
+        for (int i = 0; i < road.length; i++) {
+            int from = road[i][0];
+            int to = road[i][1];
+            int dist = road[i][2];
+            
+            if (graph[from][to] > 0) {
+                graph[from][to] = Math.min(graph[from][to], dist);
+                graph[to][from] = Math.min(graph[to][from], dist);
+            } else {
+                graph[from][to] = dist;
+                graph[to][from] = dist;
+            }
+        }
+        
+        return dijkstra(graph, N, K);
+    }
+    
+    int dijkstra(int[][] graph, int N, int K) {
+        int[] dist = new int[N + 1];
+        for (int i = 0; i <= N; i++) dist[i] = INF;
+        dist[1] = 0;
+        
+        PriorityQueue<Road> pq = new PriorityQueue<>();
+        pq.offer(new Road(1, 0));
+        
         while (!pq.isEmpty()) {
-            Node cur = pq.poll();
-            int from = cur.v;
-            int w = cur.w;
-
-            for (int to = 1; to <= n; to++) {
-                if (graph[from][to] == 0 || visited[from][to]) continue;
-                
-                if (w + graph[from][to] < dist[to]) {
-                    visited[from][to] = true;
-                    dist[to] = w + graph[from][to];
-                    pq.offer(new Node(to, w + graph[from][to]));
+            Road cur = pq.poll();
+            
+            for (int next = 1; next <= N; next++) {
+                if (graph[cur.node][next] > 0) {
+                    if (dist[cur.node] + graph[cur.node][next] < dist[next]) {
+                        dist[next] = dist[cur.node] + graph[cur.node][next];
+                        pq.offer(new Road(next, dist[next]));
+                    }
                 }
             }
         }
-    }
-    
-    private class Node implements Comparable<Node> {
-        int v, w;
-        
-        Node(int v, int w) {
-            this.v = v;
-            this.w = w;
-        }
 
-        public int compareTo(Node e) {
-            return this.w - e.w;
+        int cnt = 0;
+        for (int i = 1; i <= N; i++) {
+            if (dist[i] <= K) cnt++;
         }
-    } 
+        
+        return cnt;
+    }
 }
