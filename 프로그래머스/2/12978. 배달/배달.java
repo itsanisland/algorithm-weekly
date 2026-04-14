@@ -2,9 +2,9 @@ import java.util.*;
 
 class Solution {
     
-    static final int INF = Integer.MAX_VALUE;
+    private static final int INF = Integer.MAX_VALUE;
     
-    static class Road implements Comparable<Road> {
+    private static class Road implements Comparable<Road> {
         int to, dist;
         
         Road(int to, int dist) {
@@ -12,8 +12,9 @@ class Solution {
             this.dist = dist;
         }
         
-        public int compareTo(Road o) {
-            return this.dist - o.dist;
+        @Override
+        public int compareTo(Road other) {
+            return Integer.compare(this.dist, other.dist);
         }
     }
     
@@ -32,7 +33,7 @@ class Solution {
         return dijkstra(graph, N, K);
     }
     
-    int dijkstra(List<Road>[] graph, int N, int K) {
+    private int dijkstra(List<Road>[] graph, int N, int K) {
         int[] dist = new int[N + 1];
         for (int i = 0; i <= N; i++) dist[i] = INF;
         dist[1] = 0;
@@ -43,6 +44,10 @@ class Solution {
         while (!pq.isEmpty()) {
             Road cur = pq.poll();
             
+            // 우선순위 큐에서 꺼낸 값보다 이미 더 짧은 거리로 갱신된 경우
+            // 불필요한 연산을 줄이는 최적화 코드
+            if (cur.dist > dist[cur.to]) continue;
+            
             for (Road next : graph[cur.to]) {
                 if (dist[cur.to] + next.dist < dist[next.to]) {
                     dist[next.to] = dist[cur.to] + next.dist;
@@ -51,11 +56,11 @@ class Solution {
             }
         }
         
-        int cnt = 0;
+        int count = 0;
         for (int i = 1; i <= N; i++) {
-            if (dist[i] <= K) cnt++;
+            if (dist[i] <= K) count++;
         }
         
-        return cnt;
+        return count;
     }
 }
