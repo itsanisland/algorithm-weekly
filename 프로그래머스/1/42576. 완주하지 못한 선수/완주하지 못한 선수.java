@@ -9,7 +9,7 @@ class Solution {
         }
         
         for (String name : completion) {
-            pMap.put(name, pMap.getOrDefault(name, 0) - 1);
+            pMap.put(name, pMap.get(name) - 1);
             
             if (pMap.get(name) == 0) {
                 pMap.remove(name);
