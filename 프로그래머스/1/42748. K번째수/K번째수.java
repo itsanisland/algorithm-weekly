@@ -9,7 +9,6 @@ class Solution {
             int start = commands[i][0];
             int end = commands[i][1];
             int k = commands[i][2];
-            
             answer[i] = getKthNum(array, start, end, k);
         }
         
