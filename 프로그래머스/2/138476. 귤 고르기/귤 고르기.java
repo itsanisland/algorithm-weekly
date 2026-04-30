@@ -9,20 +9,21 @@ class Solution {
         }
         
         // Map 정렬 (값 기준)
-        
-        List<Integer> keys = new ArrayList(map.keySet());
-        Collections.sort(keys, (a, b) -> {
-            return map.get(b) - map.get(a);
-        });
+        // List<Integer> keys = new ArrayList(map.keySet());
+        // Collections.sort(keys, (a, b) -> {
+        //     return map.get(b) - map.get(a);
+        // });
+        List<Integer> values = new ArrayList<>(map.values());
+        Collections.sort(values, Collections.reverseOrder());
         
         int answer = 0;
         
-        for (int key : keys) {
+        for (int value : values) {
             if (k <= 0) {
                 break;
             }
             
-            k -= map.get(key);
+            k -= value;
             answer++;
         }
         
