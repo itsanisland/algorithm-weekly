@@ -1,39 +1,26 @@
 class Solution {
-    int N = 0, ans = 0;
-    int[] selected;
-    boolean[] visited;
+    
+    private int n, answer;
     
     public int solution(int k, int[][] dungeons) {
-        N = dungeons.length;
-        selected = new int[N];
-        visited = new boolean[N];
+        n = dungeons.length;
         
-        perm(0, N, k, dungeons);
-    
-        return ans;
+        explore(0, new boolean[n], k, dungeons);
+        
+        return answer;
     }
     
-    private void perm(int depth, int r, int k, int[][] dungeons) {
-        if (depth == r) {
-            int cnt = 0;
-            for (int i : selected) {
-                int base = dungeons[i][0], using = dungeons[i][1];
-                
-                if (k >= base) {
-                    k -= using;
-                    cnt++;
-                }
-            }
-            ans = Math.max(ans, cnt);
-            return;
-        }
+    // 순열
+    private void explore(int cnt, boolean[] selected, int k, int[][] dungeons) {        
+        if (answer == n) return;
         
-        for (int i = 0; i < N; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                selected[depth] = i;
-                perm(depth + 1, r, k, dungeons);
-                visited[i] = false;
+        answer = Math.max(answer, cnt); 
+        
+        for (int i = 0; i < n; i++) {
+            if (!selected[i] && dungeons[i][0] <= k) {
+                selected[i] = true;
+                explore(cnt + 1, selected, k - dungeons[i][1], dungeons);
+                selected[i] = false;
             }
         }
     }
