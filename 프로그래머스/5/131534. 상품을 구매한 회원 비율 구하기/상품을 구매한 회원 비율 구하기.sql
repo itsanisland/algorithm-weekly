@@ -1,17 +1,25 @@
-SET @total = (
-    SELECT COUNT(USER_ID)
-    FROM USER_INFO
-    WHERE JOINED LIKE '2021%'
-);
+WITH total_users AS (
+    SELECT
+        user_id,
+        COUNT(*) OVER() AS total
+    FROM user_info
+    WHERE YEAR(joined) = 2021
+)
 
 SELECT
-    YEAR(SALES_DATE) AS YEAR,
-    MONTH(SALES_DATE) AS MONTH,
-    # 해당 년, 월에 상품을 구입한 사용자의 수 -> 중복 X
-    COUNT(DISTINCT(USER_ID)) AS PURCHASED_USERS,
-    ROUND(COUNT(DISTINCT(USER_ID)) / @total, 1) AS PUCHASED_RATIO
-FROM ONLINE_SALE S
-JOIN USER_INFO U USING (USER_ID)
-WHERE YEAR(JOINED) = 2021
-GROUP BY YEAR, MONTH
-ORDER BY 1, 2
+    t.year AS YEAR,
+    t.month AS MONTH,
+    COUNT(*) AS PURCHASED_USERS,
+    ROUND(COUNT(*) / total, 1) AS PURCHASED_RATIO
+FROM (
+    SELECT
+        DISTINCT(s.user_id) AS user_id,
+        YEAR(SALES_DATE) AS year,
+        MONTH(SALES_DATE) AS month,
+        total
+    FROM online_sale s
+    JOIN total_users u
+    ON s.user_id = u.user_id
+) t
+GROUP BY t.year, t.month
+ORDER BY t.year, t.month
