@@ -19,19 +19,17 @@ class Solution {
             players[rank - 1] = p;
         }
         
-        // for (Map.Entry<String, Integer> entry : rankMap.getEntry()) {
-        //     System.out.println(entry.getKey() + " " + entry.getValue());
-        // }
-        
-        List<String> keys = new ArrayList(rankMap.keySet());
-        Collections.sort(keys, (a, b) -> {
-           return Integer.compare(rankMap.get(a), rankMap.get(b));
-        });
+//         List<String> keys = new ArrayList(rankMap.keySet());
+//         Collections.sort(keys, (a, b) -> {
+//            return Integer.compare(rankMap.get(a), rankMap.get(b));
+//         });
     
-        String[] answer = new String[n];
-        for (int i = 0; i < n; i++) {
-            answer[i] = keys.get(i);
-        }
-        return answer;
+//         String[] answer = new String[n];
+//         for (int i = 0; i < n; i++) {
+//             answer[i] = keys.get(i);
+//         }
+//         return answer;
+        
+        return players;
     }
 }
