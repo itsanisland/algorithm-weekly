@@ -1,14 +1,6 @@
-# SELECT f.PRODUCT_ID, f.PRODUCT_NAME, f.PRODUCT_CD, f.CATEGORY, f.PRICE
-# FROM FOOD_PRODUCT f
-# JOIN (
-#     SELECT MAX(PRICE) PRICE
-#     FROM FOOD_PRODUCT
-# ) t
-# ON f.PRICE = t.PRICE;
-
-SELECT *
-FROM FOOD_PRODUCT
-WHERE PRICE = (
-    SELECT MAX(PRICE)
-    FROM FOOD_PRODUCT
-);
+SELECT product_id, product_name, product_cd, category, price
+FROM food_product
+WHERE price = (
+    SELECT MAX(price)
+    FROM food_product
+)
