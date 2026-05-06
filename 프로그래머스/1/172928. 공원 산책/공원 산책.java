@@ -1,72 +1,52 @@
+import java.util.*;
+
 class Solution {
+    // 2. 방향 정의 (N, S, W, E)
+    private static final int[] DY = {-1, 1, 0, 0};
+    private static final int[] DX = {0, 0, -1, 1};
+    private static final String DIR = "NSWE";
+    
     public int[] solution(String[] park, String[] routes) {
         int r = park.length;
         int c = park[0].length();
-        
         int y = 0, x = 0;
+
+        // 1. 시작 지점 찾기
         for (int i = 0; i < r; i++) {
-            for (int j = 0; j < c; j++) {
-                if (park[i].charAt(j) == 'S') {
-                    y = i;
-                    x = j;
+            if (park[i].contains("S")) {
+                y = i;
+                x = park[i].indexOf("S");
+                break;
+            }
+        }
+
+        for (String route : routes) {
+            String[] split = route.split(" ");
+            int dirIdx = DIR.indexOf(split[0]);
+            int dist = Integer.parseInt(split[1]);
+
+            int ny = y, nx = x;
+            boolean isPossible = true;
+
+            // 3. 이동 검증
+            for (int i = 0; i < dist; i++) {
+                ny += DY[dirIdx];
+                nx += DX[dirIdx];
+
+                // 범위 밖이거나 장애물(X)을 만난 경우
+                if (ny < 0 || ny >= r || nx < 0 || nx >= c || park[ny].charAt(nx) == 'X') {
+                    isPossible = false;
                     break;
                 }
             }
-        }
-        
-        for (String route : routes) {
-            String[] splits = route.split(" ");
-            String op = splits[0];
-            int n = Integer.parseInt(splits[1]);
-            int ny = y, nx = x;
-            boolean ck = false;
-            
-            switch (op) {
-                case "N":
-                    for (int i = 0; i < n; i++) {
-                        ny--;
-                        if (ny < 0 || park[ny].charAt(nx) == 'X') {
-                            ck = true;
-                            break;
-                        }
-                    }
-                    break;
-                case "S":
-                    for (int i = 0; i < n; i++) {
-                        ny++;
-                        if (ny == r || park[ny].charAt(nx) == 'X') {
-                            ck = true;
-                            break;
-                        }
-                    }
-                    break;
-                case "W":
-                    for (int i = 0; i < n; i++) {
-                        nx--;
-                        if (nx < 0 || park[ny].charAt(nx) == 'X') {
-                            ck = true;
-                            break;
-                        }
-                    }
-                    break;
-                case "E":
-                    for (int i = 0; i < n; i++) {
-                        nx++;
-                        if (nx == c || park[ny].charAt(nx) == 'X') {
-                            ck = true;
-                            break;
-                        }
-                    }
-                    break;
+
+            // 4. 이동이 가능할 때만 좌표 업데이트
+            if (isPossible) {
+                y = ny;
+                x = nx;
             }
-    
-            if (ck) continue;
-            
-            y = ny;
-            x = nx;
         }
-        
-        int[] answer = {y, x};
-        return answer;
+
+        return new int[]{y, x};
     }
 }
