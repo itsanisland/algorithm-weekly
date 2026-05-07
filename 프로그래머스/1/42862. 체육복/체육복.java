@@ -1,35 +1,34 @@
-import java.util.*;
-import java.util.stream.*;
-
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        // Set 변환
-        Set<Integer> reserveSet = Arrays.stream(reserve)
-            .boxed()
-            .collect(Collectors.toSet());
+        int answer = 0;
+        boolean[] isLost = new boolean[n];
+        boolean[] canBorrow = new boolean[n];
         
-        Set<Integer> lostSet = Arrays.stream(lost)
-            .boxed()
-            .collect(Collectors.toSet());
+        for (int student : lost) {
+            isLost[student - 1] = true;
+        }
         
-        // 교집합
-        Set<Integer> common = new HashSet<>(lostSet);
-        common.retainAll(reserveSet);
+        for (int student : reserve) {
+            if (isLost[student - 1]) {
+                isLost[student - 1] = false;
+            } else {
+                canBorrow[student - 1] = true;
+            }
+        }
         
-        reserveSet.removeAll(common);
-        lostSet.removeAll(common);
-        
-        int answer = n - lostSet.size(); // 진짜 잃어버린 학생 수
-
-        // 앞, 뒤 확인
-        for (int student : lostSet) {
-            if (reserveSet.contains(student - 1)) {
-                reserveSet.remove(student - 1);
+        for (int i = n - 1; i >= 0; i--) {
+            if (!isLost[i]) {
                 answer++;
-            } else if (reserveSet.contains(student + 1)) {
-                reserveSet.remove(student + 1);
-                answer++;  
-            }  
+                continue;
+            }
+            
+            if (i + 1 < n && canBorrow[i + 1]) {
+                answer++;
+                canBorrow[i + 1] = false;
+            } else if (i - 1 >= 0 && canBorrow[i - 1]) {
+                answer++;
+                canBorrow[i - 1] = false;
+            }
         }
         
         return answer;
