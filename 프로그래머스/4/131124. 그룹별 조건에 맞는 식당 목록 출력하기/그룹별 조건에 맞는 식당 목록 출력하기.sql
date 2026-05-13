@@ -1,18 +1,14 @@
-SELECT member_name, review_text, review_date
-FROM member_profile
-JOIN rest_review USING (member_id)
+SELECT MEMBER_NAME, REVIEW_TEXT, REVIEW_DATE
+FROM MEMBER_PROFILE
+JOIN REST_REVIEW USING (MEMBER_ID)
 JOIN (
-    SELECT member_id, COUNT(*)
-    FROM rest_review
-    GROUP BY member_id
-    ORDER BY 2 DESC
+    SELECT
+        MEMBER_ID,
+        COUNT(1) AS TOTAL
+    FROM REST_REVIEW
+    GROUP BY MEMBER_ID
+    ORDER BY TOTAL DESC
     LIMIT 1
-) t USING (member_id)
-ORDER BY review_date ASC, review_text ASC
-
-# SELECT member_id, COUNT(*)
-# FROM rest_review
-# GROUP BY member_id
-# ORDER BY 2 DESC
-# LIMIT 1
+) T USING(MEMBER_ID)
+ORDER BY REVIEW_DATE ASC, REVIEW_TEXT ASC
 
