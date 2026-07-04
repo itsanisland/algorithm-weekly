@@ -1,7 +1,7 @@
 class Solution {
     
     private int MAX_N = 13;
-    private int n, r = 3, ans;
+    private int n, r = 3;
     private int[] arr;
     private boolean[] selected = new boolean[MAX_N];
     
@@ -13,9 +13,9 @@ class Solution {
         int ans = 0;
         
         for (int i = start; i < n; i++) {
-            selected[i] = true;
+            // selected[i] = true;
             ans += comb(i + 1, cnt + 1, sum + arr[i]);
-            selected[i] = false;
+            // selected[i] = false;
         }
         
         return ans;
