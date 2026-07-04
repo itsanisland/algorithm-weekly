@@ -5,25 +5,25 @@ class Solution {
     private int[] arr;
     private boolean[] selected = new boolean[MAX_N];
     
-    private void comb(int start, int cnt, int sum) {
+    private int comb(int start, int cnt, int sum) {
         if (cnt == r) {
-            if (sum == 0) {
-                ans += 1;
-            }
-            return;
+            return sum == 0 ? 1 : 0;
         }
+        
+        int ans = 0;
         
         for (int i = start; i < n; i++) {
             selected[i] = true;
-            comb(i + 1, cnt + 1, sum + arr[i]);
+            ans += comb(i + 1, cnt + 1, sum + arr[i]);
             selected[i] = false;
         }
+        
+        return ans;
     }
     
     public int solution(int[] number) {
         n = number.length;
         arr = number;
-        comb(0, 0, 0);
-        return ans;
+        return comb(0, 0, 0);
     }
 }
