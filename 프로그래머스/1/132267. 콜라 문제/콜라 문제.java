@@ -5,8 +5,7 @@ class Solution {
         while (n >= a) {
             answer += n / a * b;
             int remains = n % a;    
-            n /= a;
-            n *= b;
+            n = (n / a) * b;
             n += remains;
         }
         
