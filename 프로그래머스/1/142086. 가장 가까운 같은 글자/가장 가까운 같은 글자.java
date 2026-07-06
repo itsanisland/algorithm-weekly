@@ -7,11 +7,7 @@ class Solution {
         
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (map.get(c) == null) {
-                answer[i] = -1;
-            } else {
-                answer[i] = i - map.get(c);
-            }
+            answer[i] = i - map.getOrDefault(c, i + 1);
             map.put(c, i);
         }
         
