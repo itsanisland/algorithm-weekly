@@ -21,18 +21,8 @@ class Solution {
         String[] answer = new String[n];
         
         for (int i = 0; i < n; i++) {
-            StringBuilder sb = new StringBuilder();
-            String b1 = convertToBinary(arr1[i], n);
-            String b2 = convertToBinary(arr2[i], n);
-            
-            for (int j = 0; j < n; j++) {
-                if (b1.charAt(j) == '0' && b2.charAt(j) == '0') {
-                    sb.append(" ");
-                } else {
-                    sb.append("#");
-                }
-                answer[i] = sb.toString();
-            }
+            String binary = convertToBinary(arr1[i] | arr2[i], n);
+            answer[i] = binary.replaceAll("0", " ").replaceAll("1", "#");
         }
 
         return answer;
