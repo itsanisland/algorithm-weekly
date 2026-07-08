@@ -2,11 +2,17 @@ class Solution {
     
     private int getDivisorCount(int num) {
         int cnt = 0;
-        for (int i = 1; i <= num; i++) {
+        for (int i = 1; i * i < num; i++) {
+            // 1 4 9 16 25 ...
             if (num % i == 0) {
-                cnt += 1;
+                cnt += 2;
             }
         }
+        
+        if (Math.sqrt(num) % 1 == 0) { // 제곱수
+            cnt += 1;
+        }
+        
         return cnt;
     }
     
