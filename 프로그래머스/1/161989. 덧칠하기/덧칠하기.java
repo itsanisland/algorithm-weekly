@@ -1,14 +1,13 @@
 class Solution {
     public int solution(int n, int m, int[] section) {
-        int answer = 0;
-        int start = 0;
+        int answer = 1;
+        int start = section[0];
         
-        while (start < section.length) {
-            int last = section[start] + m ;
-            while (start < section.length && section[start] < last) {
-                start++;
+        for (int i = 1; i < section.length; i++) {
+            if (start + m - 1 < section[i]) {
+                answer += 1;
+                start = section[i];
             }
-            answer++;
         }
         
         return answer;
