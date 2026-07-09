@@ -6,12 +6,9 @@ class Solution {
         
         Arrays.sort(score);
         
-        // 7 -> 3
-        for (int i = score.length - 1; i >= 0; i -= m) {
-            if (i - m + 1 >= 0) {
-                int min = score[i - m + 1];
-                answer += min * m;
-            }
+        for (int i = score.length; i >= m; i -= m) {
+            int min = score[i - m];
+            answer += min * m;
         }
         
         return answer;
