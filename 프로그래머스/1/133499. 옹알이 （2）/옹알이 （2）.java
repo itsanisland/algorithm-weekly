@@ -4,26 +4,15 @@ class Solution {
         int answer = 0;
         
         for (String s : babbling) {
-            StringBuilder sb = new StringBuilder();
-            String prev = "";
-            int cnt = 0;
-            
-            for (int i = 0; i < s.length(); i++) {
-                sb.append(s.charAt(i));
-                String temp = sb.toString();
-                
-                for (String word : words) {
-                    if (temp.equals(word) && !temp.equals(prev)) {
-                        cnt += 1;
-                        prev = temp;
-                        while (sb.length() > 0) {
-                            sb.deleteCharAt(0);
-                        }
-                    }
-                }
+            if (s.contains("ayaaya") || s.contains("yeye") || s.contains("woowoo") || s.contains("mama")) {
+                continue;
             }
             
-            if (cnt > 0 && sb.length() == 0) {
+            for (String word : words) {
+                s = s.replace(word, " ");
+            }
+            
+            if (s.split(" ").length == 0) {
                 answer += 1;
             }
         }
