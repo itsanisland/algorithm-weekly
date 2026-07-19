@@ -5,7 +5,6 @@ class Solution {
         int n = friends.length;
         int[][] fromTo = new int[n][n];
         int[] g = new int[n];
-        int[] cnt = new int[n];
         Map<String, Integer> fMap = new HashMap<>();
         
         for (int i = 0; i < n; i++) {
@@ -21,34 +20,25 @@ class Solution {
             g[to]--;
         }
         
+        int answer = 0;
+        
         for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                if (fromTo[i][j] > 0 || fromTo[j][i] > 0) {
-                    if (fromTo[i][j] > fromTo[j][i]) {
-                        cnt[i]++;
-                    } else if (fromTo[i][j] < fromTo[j][i]) {
-                        cnt[j]++;
-                    } else {
-                        if (g[i] > g[j]) {
-                            cnt[i]++;
-                        } else if (g[i] < g[j]) {
-                            cnt[j]++;
-                        }
-                    }
-                } else if (fromTo[i][j] == 0 && fromTo[j][i] == 0) {
+            int cnt = 0;
+            for (int j = 0; j < n; j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (fromTo[i][j] > fromTo[j][i]) {
+                    cnt++;
+                } else if (fromTo[i][j] == fromTo[j][i]) {
                     if (g[i] > g[j]) {
-                        cnt[i]++;
-                    } else if (g[i] < g[j]) {
-                        cnt[j]++;
+                        cnt++;
                     }
                 }
             }
+            answer = Math.max(answer, cnt);
         }
-        
-        int answer = 0;
-        for (int i = 0; i < n; i++) {
-            answer = Math.max(answer, cnt[i]);
-        }
+
         return answer;
     }
 }
