@@ -2,13 +2,10 @@ class Solution {
     
     public int solution(String message, int[][] spoiler_ranges) {
         String[] words = message.split(" ");
-
         StringBuilder sb = new StringBuilder(message);
         
         for (int[] range : spoiler_ranges) {
-            int start = range[0];
-            int end = range[1];
-            for (int i = start; i <= end; i++) {
+            for (int i = range[0]; i <= range[1]; i++) {
                 if (sb.charAt(i) == ' ') {
                     continue;
                 }
@@ -16,8 +13,7 @@ class Solution {
             }
         }
         
-        message = sb.toString();
-        String[] spoilerWords = message.split(" ");
+        String[] spoilerWords = sb.toString().split(" ");
         int answer = 0;
         
         for (int i = 0; i < words.length; i++) {
@@ -27,10 +23,7 @@ class Solution {
                     if (i == j) {
                         continue;
                     }
-                    if (words[i].equals(spoilerWords[j])) {
-                        ck = false;
-                        break;
-                    }
+                    ck = ck && !words[i].equals(spoilerWords[j]);
                 }
                 if (ck) {
                     answer++;
