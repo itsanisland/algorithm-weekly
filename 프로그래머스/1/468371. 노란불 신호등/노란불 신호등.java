@@ -8,6 +8,11 @@ class Solution {
         return a * b / lcm(a, b);
     }
     
+    private boolean isYellow(int sec, int[] signal) {
+        sec %= signal[0] + signal[1] + signal[2];
+        return sec >= signal[0] + 1 && sec <= signal[0] + signal[1];
+    }
+    
     public int solution(int[][] signals) {
         int n = signals.length;
         int m = signals[0][0] + signals[0][1] + signals[0][2];
@@ -16,33 +21,17 @@ class Solution {
             m = gcd(m, signals[i][0] + signals[i][1] + signals[i][2]);
         }
         
-        m++;
+        int sec = 1;
         
-        boolean[][] isYellow = new boolean[n][m];
-        
-        for (int i = 0; i < n; i++) {
-            int duration = signals[i][1];
-            for (int j = signals[i][0]; j < m; j += signals[i][0] + signals[i][1] + signals[i][2]) {
-                for (int k = 1; k <= duration; k++) {
-                    if (j + k >= m) {
-                        break;
-                    }
-                    isYellow[i][j + k] = true;
-                }
-            }
-        }
-        
-        for (int i = 1; i < m - 1; i++) {
+        while (sec <= m) {
             boolean ck = true;
-            for (int j = 0; j < n - 1; j++) {
-                if (!isYellow[j][i] || !isYellow[j + 1][i]) {
-                    ck = false;
-                    break;
-                }
+            for (int i = 0; i < n; i++) {
+                ck = ck && isYellow(sec, signals[i]);
             }
             if (ck) {
-                return i;
+                return sec;
             }
+            sec++;
         }
         
         return -1;
