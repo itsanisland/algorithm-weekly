@@ -1,8 +1,11 @@
+import java.util.*;
+
 class Solution {
     
     public int solution(String message, int[][] spoiler_ranges) {
-        String[] words = message.split(" ");
+        Set<String> set = new HashSet<>();
         StringBuilder sb = new StringBuilder(message);
+        int answer = 0;
         
         for (int[] range : spoiler_ranges) {
             for (int i = range[0]; i <= range[1]; i++) {
@@ -13,22 +16,14 @@ class Solution {
             }
         }
         
-        String[] spoilerWords = sb.toString().split(" ");
-        int answer = 0;
-        
-        for (int i = 0; i < words.length; i++) {
-            boolean ck = true;
-            if (spoilerWords[i].contains("*")) {
-                for (int j = 0; j < words.length; j++) {
-                    if (i == j) {
-                        continue;
-                    }
-                    ck = ck && !words[i].equals(spoilerWords[j]);
-                }
-                if (ck) {
-                    answer++;
-                }
-                spoilerWords[i] = words[i];
+        for (String s : sb.toString().split(" ")) {
+            set.add(s);
+        }
+
+        for (String s : message.split(" ")) {
+            if (!set.contains(s)) {
+                answer++;
+                set.add(s);
             }
         }
         
