@@ -2,7 +2,6 @@ class Solution {
     public String solution(String s) {
         StringBuilder answer = new StringBuilder();
         StringBuilder temp = new StringBuilder();
-        String[] splits = s.split(" ");
         
         for (char c : s.toCharArray()) {
             if (c == ' ') {
