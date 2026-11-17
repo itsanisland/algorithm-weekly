@@ -9,8 +9,8 @@ class Solution {
             map.put(type, map.getOrDefault(type, 0) + 1);
         }
         
-        for (String key : map.keySet()) {
-            answer *= map.get(key) + 1;
+        for (int value : map.values()) {
+            answer *= value + 1;
         }
         
         answer -= 1;
