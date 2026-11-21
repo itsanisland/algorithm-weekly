@@ -1,11 +1,11 @@
 class Solution {
     
-    public int N, answer;
-    public int[][] d;
+    private int N, answer;
+    private int[][] dungeons;
     
     public int solution(int k, int[][] dungeons) {
         N = dungeons.length;
-        d = dungeons;
+        this.dungeons = dungeons;
         
         // 던전을 방문하는 순서? -> DFS/BFS(n <= 8)
         // 방문하면서 최대 방문 수 갱신
@@ -19,18 +19,18 @@ class Solution {
             return;
         }
         
+        // 던전을 방문하는 모든 순서를 탐색 -> O(8!) = 40,320
         for (int i = 0; i < N; i++) {
             if (visited[i]) continue;
             
-            if (k >= d[i][0]) {
+            if (k >= dungeons[i][0]) {
                 answer = Math.max(answer, depth + 1);
                 visited[i] = true;
-                dfs(k - d[i][1], depth + 1, visited);
+                dfs(k - dungeons[i][1], depth + 1, visited);
                 visited[i] = false;
             }
         }
         
     }
-    
     
 }
