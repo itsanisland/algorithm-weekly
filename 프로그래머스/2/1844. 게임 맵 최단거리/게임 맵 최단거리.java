@@ -2,8 +2,8 @@ import java.util.*;
 
 class Solution {
     
-    private final static int[] DX = {0, 0, -1, 1};
-    private final static int[] DY = {-1, 1, 0, 0};
+    private static final int[] DX = {0, 0, -1, 1};
+    private static final int[] DY = {-1, 1, 0, 0};
     
     private int N, M;
     private int[][] maps;
@@ -39,7 +39,7 @@ class Solution {
                 int ny = cy + DY[d];
                 int nx = cx + DX[d];
                 
-                if (isValid(ny, nx) && maps[ny][nx] == 1 & !visited[ny][nx]) {
+                if (isValid(ny, nx) && maps[ny][nx] == 1 && !visited[ny][nx]) {
                     visited[ny][nx] = true;
                     q.offer(new int[] {ny, nx, cnt + 1});
                 }
