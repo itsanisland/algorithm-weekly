@@ -33,20 +33,20 @@ class Solution {
         return answer;
     }
     
-    private int bfs(int idx, int removed) {
+    private int bfs(int start, int blocked) {
         int cnt = 1;
         
         Queue<Integer> queue = new ArrayDeque<>();
-        queue.offer(idx);
+        queue.offer(start);
         
         boolean[] visited = new boolean[n + 1];
-        visited[idx] = true;
+        visited[start] = true;
         
         while (!queue.isEmpty()) {
             int cur = queue.poll();
             
             for (int next : tree[cur]) {
-                if (visited[next] || next == removed) continue;
+                if (visited[next] || next == blocked) continue;
                 visited[next] = true;
                 queue.offer(next);
                 cnt += 1;
