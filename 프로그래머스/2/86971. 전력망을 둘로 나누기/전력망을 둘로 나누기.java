@@ -1,5 +1,3 @@
-import java.util.*;
-
 class Solution {
     
     private int n;
@@ -30,8 +28,6 @@ class Solution {
             
             int bCnt = n - aCnt;
             answer = Math.min(answer, Math.abs(aCnt - bCnt));
-            System.out.println(Arrays.toString(parents));
-            System.out.println(aCnt + " " + bCnt);
         }
         
         return answer;
@@ -44,7 +40,7 @@ class Solution {
         return parents[node] = find(parents[node]);
     }
     
-    private void union(int a, int b) {
+    private void union(int a, int b) { // 두 노드의 root끼리 연결
         int rootA = find(a);
         int rootB = find(b);
         
