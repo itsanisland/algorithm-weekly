@@ -1,5 +1,6 @@
 class Solution {
     
+    // 변하지 않는 값은 필드
     private int N, target, answer;
     private int[] numbers;
     
@@ -8,20 +9,17 @@ class Solution {
         this.target = target;
         this.numbers = numbers;
         
-        dfs(0, 0);
+        answer = dfs(0, 0);
         
         return answer;
     }
     
-    private void dfs(int n, int result) {
-        if (n == N) {
-            if (target == result) {
-                answer += 1;
-            }
-            return;
+    // 바뀌는 값은 파라미터
+    private int dfs(int idx, int sum) {
+        if (idx == N) {
+            return target == sum ? 1 : 0;
         }
         
-        dfs(n + 1, result + numbers[n]);
-        dfs(n + 1, result - numbers[n]);
+        return dfs(idx + 1, sum + numbers[idx]) + dfs(idx + 1, sum - numbers[idx]);
     }
 }
