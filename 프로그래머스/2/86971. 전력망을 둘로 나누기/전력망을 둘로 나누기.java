@@ -25,7 +25,7 @@ class Solution {
         
         for (int i = 0; i < wires.length; i++) {
             int a = bfs(wires[i][0], wires[i][1]);
-            int b = bfs(wires[i][1], wires[i][0]);
+            int b = n - a;
             
             answer = Math.min(answer, Math.abs(a - b));
         }
