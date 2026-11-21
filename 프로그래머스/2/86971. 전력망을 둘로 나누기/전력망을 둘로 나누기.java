@@ -3,56 +3,56 @@ import java.util.*;
 class Solution {
     
     private int n;
-    private List<Integer>[] tree;
+    private int[] parents; // 바로 위 부모 (root가 아님)
     
     public int solution(int n, int[][] wires) {
-        int answer = Integer.MAX_VALUE;
+        int answer = n;
         this.n = n;
-        tree = new ArrayList[n + 1];
-        
-        for (int i = 0; i <= n; i++) {
-            tree[i] = new ArrayList<>();
-        }
+        parents = new int[n + 1];
         
         for (int i = 0; i < wires.length; i++) {
-            tree[wires[i][0]].add(wires[i][1]);
-            tree[wires[i][1]].add(wires[i][0]);
-        }
-        
-        // 1 ~ n까지 하나씩 끊고
-        // 두 송전탑을 시작으로 각각의 전력망의 송전탑 개수 세기
-        // 송전탑 개수의 차이의 최솟값 갱신
-        
-        for (int i = 0; i < wires.length; i++) {
-            int a = bfs(wires[i][0], wires[i][1]);
-            int b = n - a;
+            for (int j = 1; j <= n; j++) {
+                parents[j] = j;
+            }
             
-            answer = Math.min(answer, Math.abs(a - b));
+            for (int j = 0; j < wires.length; j++) {
+                if (i == j) continue;
+                union(wires[j][0], wires[j][1]);
+            }
+            
+            int root = find(1);
+            int aCnt = 1;
+            for (int j = 2; j <= n; j++) {
+                if (find(j) == root) {
+                    aCnt++;
+                }
+            }
+            
+            int bCnt = n - aCnt;
+            answer = Math.min(answer, Math.abs(aCnt - bCnt));
+            System.out.println(Arrays.toString(parents));
+            System.out.println(aCnt + " " + bCnt);
         }
         
         return answer;
     }
     
-    private int bfs(int start, int blocked) {
-        int cnt = 1;
-        
-        Queue<Integer> queue = new ArrayDeque<>();
-        queue.offer(start);
-        
-        boolean[] visited = new boolean[n + 1];
-        visited[start] = true;
-        
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            
-            for (int next : tree[cur]) {
-                if (visited[next] || next == blocked) continue;
-                visited[next] = true;
-                queue.offer(next);
-                cnt += 1;
-            }
+    private int find(int node) { // root 찾기
+        if (parents[node] == node) {
+            return node;
         }
-        
-        return cnt;
+        return parents[node] = find(parents[node]);
     }
+    
+    private void union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        
+        if (rootA < rootB) {
+            parents[rootB] = rootA;   
+        } else if (rootA > rootB) {
+            parents[rootA] = rootB;
+        }
+    }
+    
 }
